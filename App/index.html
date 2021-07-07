@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天室</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div>
+        对话：<textarea id="history" cols="100" rows="30" readonly></textarea>
+    </div>
+    <div class="signin_div">
+        名称：<input class="name" type="text"><input class="signin" type="button" value="进入">
+    </div>
+    <div class="send_div" style="display: none;">
+        内容：<input class="message" type="text"><input class="send" type="button" value="发送">
+    </div>
+</body>
+<script>
+    var name;
+    var ws;
+
+    $('.signin').click(function () {
+        name = $('.name').val();
+        $('.signin_div').hide();
+        $('.send_div').show();
+        ws = new WebSocket("ws://127.0.0.1:2000");
+        ws.onopen = function () {
+            ws.send("欢迎 " + name + " 进入聊天室");
+        };
+        ws.onmessage = function (e) {
+            $('#history').html($('#history').html() + e.data + "\n");
+        };
+
+        $('.send').click(function () {
+            ws.send(name + '：' + $('.message').val());
+            $('.message').val('');
+            $('.message').focus();
+        });
+    });
+</script>
+
+</html>
