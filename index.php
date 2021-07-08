@@ -1,7 +1,7 @@
 <?php
 use Workerman\Worker;
 require_once __DIR__ . '/Vender/Workerman/Autoloader.php';
-require_once __DIR__ . '/App/tx.php';
+require_once __DIR__ . '/App/service.php';
 
 $ws_worker = new Worker("websocket://0.0.0.0:2000");
 
@@ -14,7 +14,7 @@ $ws_worker->onMessage = function ($connection, $data)use($ws_worker) {
 
     if ($data['send_type'] == "login") {
         // 验证学生端/教师端token
-        if (!$face_token = check_token($data)) {
+        if (!$face_token = check_student_token($data)) {
             // token验证失败
             $connection->close(return_error("login", "签名验证失败", 'list'));
         } else {
@@ -28,18 +28,25 @@ $ws_worker->onMessage = function ($connection, $data)use($ws_worker) {
             send_list($data['channel']);
         }
     }
+
+    if ($data['send_type'] == "kick") {
+        // 验证面试token
+        if (!$face_token = check_face_token($data['face_token'])) {
+            // token验证失败
+            $connection->close(return_error("login", "签名验证失败", 'list'));
+            unset($ws_worker->channel[$connection->channel]['teacher'][$connection->user_id]);
+        } else {
+            // token验证成功执行踢出操作
+            $ws_worker->channel[$connection->channel]['student'][$data['user_id']]->close(return_success("kick", "教师踢出操作", '', ['face_token'=>$face_token]));
+            unset($ws_worker->channel[$connection->channel]['student'][$data['user_id']]);
+        }
+
+        // 广播
+        send_list($connection->channel);
+    }
 };
 
-$ws_worker->onClose = function($connection)use($ws_worker) {
-    if (isset($ws_worker->channel[$connection->channel]['teacher'][$connection->user_id])) {
-        unset($ws_worker->channel[$connection->channel]['teacher'][$connection->user_id]);
-    }
-    if (isset($ws_worker->channel[$connection->channel]['student'][$connection->user_id])) {
-        unset($ws_worker->channel[$connection->channel]['student'][$connection->user_id]);
-    }
-    send_list($connection->channel);
-};
-
+// 建立关联
 function build_link($data, &$connection) {
     global $ws_worker;
 
@@ -50,6 +57,7 @@ function build_link($data, &$connection) {
         $ws_worker->channel[$data['channel']]['student'] = array();
     }
 
+    // 个人数据关联
     $connection->user_id = $data['user_id'];
     $connection->channel = $data['channel'];
 
@@ -69,6 +77,7 @@ function build_link($data, &$connection) {
     }
 }
 
+// 广播房间学生列表
 function send_list($channel) {
     global $ws_worker;
 
@@ -78,13 +87,13 @@ function send_list($channel) {
     if (!empty($ws_worker->channel[$channel]['student'])) {
         // 广播房间内学生列表
         foreach($ws_worker->channel[$channel]['student'] as $connection) {
-            $connection->send(return_success('list', '获取学生列表成功', '', array_keys($ws_worker->channel[$channel]['student'])));
+            $connection->send(return_success('list', '获取学生列表成功', '', ['list'=>array_keys($ws_worker->channel[$channel]['student'])]));
         }
     }
     if (!empty($ws_worker->channel[$channel]['teacher'])) {
         // 广播房间内学生列表
         foreach($ws_worker->channel[$channel]['teacher'] as $connection) {
-            $connection->send(return_success('list', '获取学生列表成功', '', array_keys($ws_worker->channel[$channel]['student'])));
+            $connection->send(return_success('list', '获取学生列表成功', '', ['list'=>array_keys($ws_worker->channel[$channel]['student'])]));
         }
     }
 }

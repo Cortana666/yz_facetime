@@ -20,7 +20,7 @@ function return_success($send_type = '', $message = '', $url = '', $data = []) {
     return json_encode($return);
 }
 
-function check_token($data) {
+function check_student_token($data) {
     if (empty($data['user_id']) || empty($data['student_token'])) {
         return false;
     }
@@ -39,6 +39,16 @@ function check_token($data) {
     $face_token['time'] = time();
 
     return encrypt_token(serialize($face_token));
+}
+
+function check_face_token($token)
+{
+    $face_token = unserialize(decrypt_token($token));
+    if (time() - $face_token['time'] > 10800) {
+        return false;
+    }
+
+    return $face_token;
 }
 
 function encrypt_token($data) {
