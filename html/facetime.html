@@ -20,18 +20,28 @@
     </style>
 </head>
 <body>
-    <div id="count">
+    <div>
         房间学生人数：<span id="number"></span>
         <div id="group">
             
         </div>
     </div>
-    <div id="func_div">
+    <hr/>
+    <div>
         <input type="button" value="网络检测" onclick="netCheck()">
         <span id="downlink_status"></span>
         <span id="uplink_status"></span>
+        <select id="microphone_device">
+            
+        </select>
+        <select id="camera_device">
+            
+        </select>
         <input type="button" value="设备检测" onclick="deviceCheck()">
         <span id="device_status"></span>
+    </div>
+    <hr/>
+    <div>
         <input id="join" type="button" value="加入" onclick="startCall()" style="display: none;">
         <span id="microphone_status"></span>
         <input type="button" value="麦克风关闭" onclick="microphoneSet(false)">
@@ -41,6 +51,7 @@
         <input type="button" value="摄像头开启" onclick="cameraSet(true)">
         <input type="button" value="挂断" onclick="leaveCall()">
     </div>
+    <hr/>
     <div id="video_div">
         <div id="video" class="video"></div>
     </div>
@@ -48,26 +59,25 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/AgoraRTC_N-4.5.0.js"></script>
 <script>
+    // 变量初始化
     var channel = getUrlQuery('channel');
     var agora_token = getUrlQuery('agora_token');
     var user_id = getUrlQuery('user_id');
     var name = getUrlQuery('name');
     var type = getUrlQuery('type');
-    if (type == 1) {
-        $("#join").show();
-    }
-
     var face_token;
     var student_list;
 
-    var is_start = false;
+    // 状态初始化
+    if (type == 1) {
+        $("#join").show();
+    }
     
+    // websocket操作
     ws = new WebSocket("ws://127.0.0.1:2000");
-
     ws.onopen = function () {
         ws.send(ots({ "send_type": "login", "user_id": user_id, "name": name, "channel": channel, "type": type, "student_token": "123456"}));
     };
-
     ws.onmessage = function (e) {
         data = sto(e.data);
         console.log(data);
@@ -83,10 +93,10 @@
 
         if (data.send_type == "list") {
             student_list = "";
-            for (i = 0; i < data.data.list.length; i++) {
+            for (let i = 0; i < data.data.list.length; i++) {
                 student_list += "<p>" + data.data.list[i].name;
                 if (type == 1) {
-                    student_list += '<input type="button" value="开始面试" onclick="startFace(' + data.data.list[i].user_id +')"><input type="button" value="结束面试" onclick="endFace(' + data.data.list[i].user_id +')"><input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i].user_id+')">';
+                    student_list += '<input type="button" value="开始面试" onclick="startFace(' + data.data.list[i].user_id +')"><input type="button" value="挂断" onclick="endFace(' + data.data.list[i].user_id +')"><input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i].user_id+')">';
                 }
                 +"</p>"
             }
@@ -111,15 +121,12 @@
             leaveCall();
         }
     };
-
     function kickOut(user_id) {
         ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
     }
-
     function startFace(user_id) {
         ws.send(ots({ "send_type": "start", "face_token": face_token, "user_id": user_id }));
     }
-
     function endFace(user_id) {
         ws.send(ots({ "send_type": "end", "face_token": face_token, "user_id": user_id }));
     }
@@ -127,46 +134,43 @@
 
 
 
-    function ots(param) {
-        return JSON.stringify(param)
-    }
 
-    function sto(param) {
-        return JSON.parse(param)
-    }
-
-    function getUrlQuery(variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            if (pair[0] == variable) { return pair[1]; }
-        }
-        return (false);
-    }
-
-
-
-
+    // 变量初始化
     var rtc = {
-        // 用来放置本地客户端。
         client: null,
-        // 用来放置本地音视频频轨道对象。
         localAudioTrack: null,
         localVideoTrack: null,
     };
-
     var options = {
-        // 替换成你自己项目的 App ID。
         appId: "d08b76fcc31a44d5b3974f6607bd9a65",
-        // 传入目标频道名。
         channel: channel,
-        // 如果你的项目开启了 App 证书进行 Token 鉴权，这里填写生成的 Token 值。
         token: agora_token,
     };
+    var is_start = false;
+    var selectedMicrophoneId;
+    var selectedCameraId;
+
+    // 状态初始化
+    getDevice();
+    selectedMicrophoneId = $("#microphone_device").val();
+    selectedCameraId = $("#camera_device").val();
 
     // 开始网络质量检测
     async function netCheck() {
+        setTimeout(async function () {
+            // 清空状态
+            $('#uplink_status').html('');
+            $('#downlink_status').html('');
+
+            // 销毁本地音视频轨道。
+            localAudioTrack.close();
+            localVideoTrack.close();
+
+            // 离开频道。
+            await downlinkClient.leave();
+            await uplinkClient.leave();
+        }, 10 * 1000);
+
         uplinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
         downlinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
@@ -208,24 +212,10 @@
 
         console.log("uplink video stats", uplinkVideoStats);
         console.log("downlink video stats", downlinkVideoStats);
-
-        setTimeout(async function () {
-            // 清空状态
-            $('#uplink_status').html('');
-            $('#downlink_status').html('');
-
-            // 销毁本地音视频轨道。
-            localAudioTrack.close();
-            localVideoTrack.close();
-
-            // 离开频道。
-            await downlinkClient.leave();
-            await uplinkClient.leave();
-        }, 10 * 1000);
     }
 
-    // 开始设备检测
-    async function deviceCheck() {
+    // 获取所有设备
+    async function getDevice() {
         // 获取所有音视频设备
         AgoraRTC.getDevices()
         .then(devices => {
@@ -236,8 +226,28 @@
                 return device.kind === "videoinput";
             });
 
-            var selectedMicrophoneId = audioDevices[0].deviceId;
-            var selectedCameraId = videoDevices[0].deviceId;
+            for (let index = 0; index < audioDevices.length; index++) {
+                $("#microphone_device").append('<option value="' + audioDevices[index]['deviceId'] + '">' + audioDevices[index]['label'] + '</option>')
+            }
+
+            for (let index = 0; index < videoDevices.length; index++) {
+                $("#camera_device").append('<option value="' + videoDevices[index]['deviceId'] + '">' + videoDevices[index]['label'] + '</option>')
+            }
+        })
+    }
+
+    // 设备切换
+    $("#microphone_device").change(function(){
+        selectedMicrophoneId = $(this).val();
+    });
+    $("#camera_device").change(function(){
+        selectedCameraId = $(this).val();
+    });
+
+    // 开始设备检测
+    async function deviceCheck() {
+        AgoraRTC.getDevices()
+        .then(devices => {
             return Promise.all([
                 AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
                 AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
@@ -368,6 +378,30 @@
 
         // 离开频道。
         await rtc.client.leave();
+    }
+
+
+
+
+    // json对象转json字符串
+    function ots(param) {
+        return JSON.stringify(param)
+    }
+
+    // json字符串转json对象
+    function sto(param) {
+        return JSON.parse(param)
+    }
+
+    // 获取url参数
+    function getUrlQuery(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
     }
 </script>
 </html>
