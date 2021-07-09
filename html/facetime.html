@@ -329,7 +329,7 @@
         const uid = await rtc.client.join(options.appId, options.channel, options.token, null);
 
         // 创建并发布本地音视频轨道
-        const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+        const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks({ cameraId: selectedCameraId }, { microphoneId: selectedMicrophoneId });
         rtc.localAudioTrack = localAudioTrack;
         rtc.localVideoTrack = localVideoTrack;
         rtc.localVideoTrack.play("video");
