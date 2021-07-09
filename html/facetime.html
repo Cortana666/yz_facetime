@@ -28,19 +28,18 @@
     </div>
     <div id="func_div">
         <input type="button" value="网络检测" onclick="netCheck()">
-        <input type="button" value="网络检测" onclick="netCheck()">
         <span id="downlink_status"></span>
         <span id="uplink_status"></span>
         <input type="button" value="设备检测" onclick="deviceCheck()">
         <span id="device_status"></span>
-        <input type="button" value="加入" onclick="startCall()">
+        <input id="join" type="button" value="加入" onclick="startCall()" style="display: none;">
         <span id="microphone_status"></span>
         <input type="button" value="麦克风关闭" onclick="microphoneSet(false)">
         <input type="button" value="麦克风开启" onclick="microphoneSet(true)">
         <span id="camera_status"></span>
         <input type="button" value="摄像头关闭" onclick="cameraSet(false)">
         <input type="button" value="摄像头开启" onclick="cameraSet(true)">
-        <input type="button" value="离开" onclick="leaveCall()">
+        <input type="button" value="挂断" onclick="leaveCall()">
     </div>
     <div id="video_div">
         <div id="video" class="video"></div>
@@ -49,139 +48,14 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/AgoraRTC_N-4.5.0.js"></script>
 <script>
-
-    // // 开始网络质量检测
-    // async function netCheck() {
-    //     uplinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    //     downlinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    //     try {
-    //     const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-    //     } catch (e) {
-    //         console.log(e);
-    //         alert(1);
-    //     }
-    //     const uplinkClientUid = await uplinkClient.join(options.appId, options.channel, options.token, null);
-    //     const downlinkClientUid = await downlinkClient.join(options.appId, options.channel, options.token, null);
-
-    //     await uplinkClient.publish([localAudioTrack, localVideoTrack]);
-    //     downlinkClient.on("user-published", async (user, mediaType) => {
-    //         await downlinkClient.subscribe(user, mediaType);
-    //     })
-
-    //     const networkQuality = [
-    //         '质量未知',
-    //         '质量极好',
-    //         '用户主观感觉和极好差不多，但码率可能略低于极好',
-    //         '用户主观感受有瑕疵但不影响沟通',
-    //         '勉强能沟通但不顺畅',
-    //         '网络质量非常差，基本不能沟通',
-    //         '网络连接断开，完全无法沟通'
-    //     ]
-
-    //     // 获取上行网络质量
-    //     uplinkClient.on("network-quality", (quality) => {
-    //         console.log("uplink network quality", quality.uplinkNetworkQuality);
-    //         $('#uplink_status').html("上行：" + networkQuality[quality.uplinkNetworkQuality]);
-    //     });
-
-    //     // 获取下行网络质量
-    //     downlinkClient.on("network-quality", (quality) => {
-    //         console.log("downlink network quality", quality.downlinkNetworkQuality);
-    //         $('#downlink_status').html("下行：" + networkQuality[quality.uplinkNetworkQuality]);
-    //     });
-
-    //     // 获取上行统计数据
-    //     uplinkVideoStats = uplinkClient.getLocalVideoStats();
-    //     // 获取下行统计数据
-    //     downlinkVideoStats = downlinkClient.getRemoteVideoStats()[uplinkClientUid];
-
-    //     console.log("uplink video stats", uplinkVideoStats);
-    //     console.log("downlink video stats", downlinkVideoStats);
-
-    //     setTimeout(async function () {
-    //         // 清空状态
-    //         $('#uplink_status').html('');
-    //         $('#downlink_status').html('');
-
-    //         // 销毁本地音视频轨道。
-    //         localAudioTrack.close();
-    //         localVideoTrack.close();
-
-    //         // 离开频道。
-    //         await downlinkClient.leave();
-    //         await uplinkClient.leave();
-    //     }, 10 * 1000);
-    // }
-
-    // // 开始设备检测
-    // async function deviceCheck() {
-    //     // 获取所有音视频设备
-    //     AgoraRTC.getDevices()
-    //     .then(devices => {
-    //         const audioDevices = devices.filter(function (device) {
-    //             return device.kind === "audioinput";
-    //         });
-    //         const videoDevices = devices.filter(function (device) {
-    //             return device.kind === "videoinput";
-    //         });
-
-    //         var selectedMicrophoneId = audioDevices[0].deviceId;
-    //         var selectedCameraId = videoDevices[0].deviceId;
-    //         return Promise.all([
-    //             AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
-    //             AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
-    //         ]);
-    //     })
-    //     .then(track => {
-    //         track[0].play("video");
-    //         var interval = setInterval(() => {
-    //             const level = track[1].getVolumeLevel();
-    //             console.log("local stream audio level", level);
-    //             $('#device_status').html("音量：" + level * 100);
-    //         }, 1000);
-
-    //         setTimeout(async function () {
-    //             // 清空状态
-    //             $('#device_status').html("");
-
-    //             // 销毁本地音视频轨道。
-    //             clearInterval(interval)
-    //             track[0].close();
-    //             track[1].close();
-    //         }, 5 * 1000);
-    //     });
-    // }
-
-    
-
-    // // 暂时停用启用麦克风采集
-    // async function microphoneSet(flag) {
-    //     await rtc.localAudioTrack.setEnabled(flag);
-    //     if (flag) {
-    //         $("#microphone_status").html("麦克风开启");
-    //     } else {
-    //         $("#microphone_status").html("麦克风关闭");
-    //     }
-    // }
-
-    // // 暂时停用启用摄像头采集
-    // async function cameraSet(flag) {
-    //     await rtc.localVideoTrack.setEnabled(flag);
-    //     if (flag) {
-    //         $("#camera_status").html("摄像头开启");
-    //     } else {
-    //         $("#camera_status").html("摄像头关闭");
-    //     }
-    // }
-
-    
-</script>
-<script>
     var channel = getUrlQuery('channel');
     var agora_token = getUrlQuery('agora_token');
     var user_id = getUrlQuery('user_id');
     var name = getUrlQuery('name');
     var type = getUrlQuery('type');
+    if (type == 1) {
+        $("#join").show();
+    }
 
     var face_token;
     var student_list;
@@ -212,7 +86,7 @@
             for (i = 0; i < data.data.list.length; i++) {
                 student_list += "<p>" + data.data.list[i].name;
                 if (type == 1) {
-                    student_list += '<input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i].user_id+')">';
+                    student_list += '<input type="button" value="开始面试" onclick="startFace(' + data.data.list[i].user_id +')"><input type="button" value="结束面试" onclick="endFace(' + data.data.list[i].user_id +')"><input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i].user_id+')">';
                 }
                 +"</p>"
             }
@@ -226,11 +100,32 @@
             alert(data.message);
             location.href = "http://127.0.0.1/yz_facetime/html/" + name + ".html";
         }
+
+        if (data.send_type == "start") {
+            alert(data.message);
+            startCall();
+        }
+
+        if (data.send_type == "end") {
+            alert(data.message);
+            leaveCall();
+        }
     };
 
     function kickOut(user_id) {
         ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
     }
+
+    function startFace(user_id) {
+        ws.send(ots({ "send_type": "start", "face_token": face_token, "user_id": user_id }));
+    }
+
+    function endFace(user_id) {
+        ws.send(ots({ "send_type": "end", "face_token": face_token, "user_id": user_id }));
+    }
+
+
+
 
     function ots(param) {
         return JSON.stringify(param)
@@ -269,6 +164,104 @@
         // 如果你的项目开启了 App 证书进行 Token 鉴权，这里填写生成的 Token 值。
         token: agora_token,
     };
+
+    // 开始网络质量检测
+    async function netCheck() {
+        uplinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+        downlinkClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+        const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+        const uplinkClientUid = await uplinkClient.join(options.appId, options.channel, options.token, null);
+        const downlinkClientUid = await downlinkClient.join(options.appId, options.channel, options.token, null);
+
+        await uplinkClient.publish([localAudioTrack, localVideoTrack]);
+        downlinkClient.on("user-published", async (user, mediaType) => {
+            await downlinkClient.subscribe(user, mediaType);
+        })
+
+        const networkQuality = [
+            '质量未知',
+            '质量极好',
+            '用户主观感觉和极好差不多，但码率可能略低于极好',
+            '用户主观感受有瑕疵但不影响沟通',
+            '勉强能沟通但不顺畅',
+            '网络质量非常差，基本不能沟通',
+            '网络连接断开，完全无法沟通'
+        ]
+
+        // 获取上行网络质量
+        uplinkClient.on("network-quality", (quality) => {
+            console.log("uplink network quality", quality.uplinkNetworkQuality);
+            $('#uplink_status').html("上行：" + networkQuality[quality.uplinkNetworkQuality]);
+        });
+
+        // 获取下行网络质量
+        downlinkClient.on("network-quality", (quality) => {
+            console.log("downlink network quality", quality.downlinkNetworkQuality);
+            $('#downlink_status').html("下行：" + networkQuality[quality.uplinkNetworkQuality]);
+        });
+
+        // 获取上行统计数据
+        uplinkVideoStats = uplinkClient.getLocalVideoStats();
+        // 获取下行统计数据
+        downlinkVideoStats = downlinkClient.getRemoteVideoStats()[uplinkClientUid];
+
+        console.log("uplink video stats", uplinkVideoStats);
+        console.log("downlink video stats", downlinkVideoStats);
+
+        setTimeout(async function () {
+            // 清空状态
+            $('#uplink_status').html('');
+            $('#downlink_status').html('');
+
+            // 销毁本地音视频轨道。
+            localAudioTrack.close();
+            localVideoTrack.close();
+
+            // 离开频道。
+            await downlinkClient.leave();
+            await uplinkClient.leave();
+        }, 10 * 1000);
+    }
+
+    // 开始设备检测
+    async function deviceCheck() {
+        // 获取所有音视频设备
+        AgoraRTC.getDevices()
+        .then(devices => {
+            const audioDevices = devices.filter(function (device) {
+                return device.kind === "audioinput";
+            });
+            const videoDevices = devices.filter(function (device) {
+                return device.kind === "videoinput";
+            });
+
+            var selectedMicrophoneId = audioDevices[0].deviceId;
+            var selectedCameraId = videoDevices[0].deviceId;
+            return Promise.all([
+                AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
+                AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
+            ]);
+        })
+        .then(track => {
+            track[0].play("video");
+            var interval = setInterval(() => {
+                const level = track[1].getVolumeLevel();
+                console.log("local stream audio level", level);
+                $('#device_status').html("音量：" + level * 100);
+            }, 1000);
+
+            setTimeout(async function () {
+                // 清空状态
+                $('#device_status').html("");
+
+                // 销毁本地音视频轨道。
+                clearInterval(interval)
+                track[0].close();
+                track[1].close();
+            }, 5 * 1000);
+        });
+    }
 
     // 创建并加入频道
     async function startCall() {
@@ -334,6 +327,26 @@
         $("#camera_status").html("摄像头开启");
 
         await rtc.client.publish([rtc.localAudioTrack, rtc.localVideoTrack]);
+    }
+
+    // 暂时停用启用麦克风采集
+    async function microphoneSet(flag) {
+        await rtc.localAudioTrack.setEnabled(flag);
+        if (flag) {
+            $("#microphone_status").html("麦克风开启");
+        } else {
+            $("#microphone_status").html("麦克风关闭");
+        }
+    }
+
+    // 暂时停用启用摄像头采集
+    async function cameraSet(flag) {
+        await rtc.localVideoTrack.setEnabled(flag);
+        if (flag) {
+            $("#camera_status").html("摄像头开启");
+        } else {
+            $("#camera_status").html("摄像头关闭");
+        }
     }
 
     // 离开频道

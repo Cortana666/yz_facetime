@@ -55,6 +55,36 @@ $ws_worker->onMessage = function ($connection, $data) {
         // 广播列表
         WorkerService::send_list($ws_worker, $db, $connection);
     }
+
+    if ($data['send_type'] == "start") {
+        // 验证面试token
+        if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
+            // token验证失败
+            $connection->close(Base::error("login", "签名验证失败", 'list'));
+            unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
+        } else {
+            // token验证成功开始面试
+            $ws_worker->channel[$connection->channel][2][$data['user_id']]->send(Base::success("start", "开始面试"));
+        }
+
+        // 广播列表
+        WorkerService::send_list($ws_worker, $db, $connection);
+    }
+
+    if ($data['send_type'] == "end") {
+        // 验证面试token
+        if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
+            // token验证失败
+            $connection->close(Base::error("login", "签名验证失败", 'list'));
+            unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
+        } else {
+            // token验证成功开始面试
+            $ws_worker->channel[$connection->channel][2][$data['user_id']]->send(Base::success("end", "结束面试"));
+        }
+
+        // 广播列表
+        WorkerService::send_list($ws_worker, $db, $connection);
+    }
 };
 
 Worker::runAll();
