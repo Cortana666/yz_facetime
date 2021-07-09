@@ -36,24 +36,24 @@ $ws_worker->onMessage = function ($connection, $data) {
             $connection->send(Base::success("login", "建立连接成功", '', ['face_token'=>$face_token]));
 
             // 广播列表
-            WorkerService::send_list($ws_worker, $connection->channel);
+            WorkerService::send_list($ws_worker, $db, $connection);
         }
     }
 
     if ($data['send_type'] == "kick") {
         // 验证面试token
         if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
-    //         // token验证失败
-    //         $connection->close(return_error("login", "签名验证失败", 'list'));
-    //         unset($ws_worker->channel[$connection->channel]['teacher'][$connection->user_id]);
+            // token验证失败
+            $connection->close(Base::error("login", "签名验证失败", 'list'));
+            unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
         } else {
-    //         // token验证成功执行踢出操作
-    //         $ws_worker->channel[$connection->channel]['student'][$data['user_id']]->close(return_success("kick", "教师踢出操作", '', ['face_token'=>$face_token]));
-    //         unset($ws_worker->channel[$connection->channel]['student'][$data['user_id']]);
+            // token验证成功执行踢出操作
+            $ws_worker->channel[$connection->channel][2][$data['user_id']]->close(Base::success("kick", "教师踢出操作"));
+            unset($ws_worker->channel[$connection->channel][2][$data['user_id']]);
         }
 
         // 广播列表
-        WorkerService::send_list($ws_worker, $connection->channel);
+        WorkerService::send_list($ws_worker, $db, $connection);
     }
 };
 

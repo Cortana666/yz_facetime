@@ -207,26 +207,30 @@
             }
         }
 
-        // if (data.send_type == "list") {
-        //     student_list = "";
-        //     for (i = 0; i < data.data.list.length; i++) {
-        //         student_list += "<p>" + data.data.list[i];
-        //         if (type == 1) {
-        //             student_list += '<input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i]+')">';
-        //         }
-        //         +"</p>"
-        //     }
-        //     $('#group').html(student_list);
-        // }
+        if (data.send_type == "list") {
+            student_list = "";
+            for (i = 0; i < data.data.list.length; i++) {
+                student_list += "<p>" + data.data.list[i].name;
+                if (type == 1) {
+                    student_list += '<input type="button" value="踢出房间" onclick="kickOut('+ data.data.list[i].user_id+')">';
+                }
+                +"</p>"
+            }
+            $('#group').html(student_list);
+        }
 
-        // if (data.send_type == "kick") {
-        //     if (is_start) {
-        //         leaveCall();
-        //     }
-        //     alert(data.message);
-        //     location.href = "http://127.0.0.1/yz_facetime/app/" + name + ".html";
-        // }
+        if (data.send_type == "kick") {
+            if (is_start) {
+                leaveCall();
+            }
+            alert(data.message);
+            location.href = "http://127.0.0.1/yz_facetime/html/" + name + ".html";
+        }
     };
+
+    function kickOut(user_id) {
+        ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
+    }
 
     function ots(param) {
         return JSON.stringify(param)
@@ -244,10 +248,6 @@
             if (pair[0] == variable) { return pair[1]; }
         }
         return (false);
-    }
-
-    function kickOut(user_id) {
-        ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
     }
 
 

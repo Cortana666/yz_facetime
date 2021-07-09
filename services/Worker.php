@@ -54,20 +54,28 @@ class Worker {
      * @param [type] $channel
      * @return void
      */
-    public static function send_list($ws_worker, $channel) {
-        // 获取账号名称
-        // get_student_name();
+    public static function send_list($ws_worker, $db, $connection) {
+        $user_ids = array();
+        if ($ws_worker->channel[$connection->channel][2]) {
+            $user_ids = array_keys($ws_worker->channel[$connection->channel][2]);
+        }
 
-        if (!empty($ws_worker->channel[$channel][1])) {
+        // 获取账号名称
+        $ims_user = array();
+        if ($user_ids) {
+            $ims_user = $db->select('user_id,AES_DECRYPT(name, "'.Base::get_eol_key().'") as name')->from('ims_user')->where('user_id in ('.implode(',', $user_ids).')')->query();
+        }
+
+        if (!empty($ws_worker->channel[$connection->channel][1])) {
             // 广播房间内学生列表
-            foreach($ws_worker->channel[$channel][1] as $connection) {
-                $connection->send(Base::success('list', '获取学生列表成功', '', ['list'=>array_keys($ws_worker->channel[$channel][1])]));
+            foreach($ws_worker->channel[$connection->channel][1] as $connect) {
+                $connect->send(Base::success('list', '获取学生列表成功', '', ['list'=>$ims_user]));
             }
         }
-        if (!empty($ws_worker->channel[$channel][2])) {
+        if (!empty($ws_worker->channel[$connection->channel][2])) {
             // 广播房间内学生列表
-            foreach($ws_worker->channel[$channel][2] as $connection) {
-                $connection->send(Base::success('list', '获取学生列表成功', '', ['list'=>array_keys($ws_worker->channel[$channel][2])]));
+            foreach($ws_worker->channel[$connection->channel][2] as $connect) {
+                $connect->send(Base::success('list', '获取学生列表成功', '', ['list'=>$ims_user]));
             }
         }
     }

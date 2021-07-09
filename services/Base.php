@@ -21,7 +21,7 @@ class Base {
      * @date   2021-07-08
      * @return void
      */
-    private static function get_eol_key() {
+    public static function get_eol_key() {
         return "eol@2021#kw";
     }
 
