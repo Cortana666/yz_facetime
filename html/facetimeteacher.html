@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师面试</title>
+    <style>
+        .video {
+            width: 480px;
+            height: 320px;
+        }
+
+        @media (max-width: 640px) {
+            .video {
+                width: 320px;
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        房间学生人数：<span id="number"></span>
+        <div id="group">
+            
+        </div>
+    </div>
+    <hr/>
+    <div>
+        <span id="microphone_status"></span>
+        <input type="button" value="麦克风关闭" onclick="microphoneSet(false)">
+        <input type="button" value="麦克风开启" onclick="microphoneSet(true)">
+        <span id="camera_status"></span>
+        <input type="button" value="摄像头关闭" onclick="cameraSet(false)">
+        <input type="button" value="摄像头开启" onclick="cameraSet(true)">
+        <input type="button" value="屏幕共享" onclick="">
+        <input type="button" value="邀请" onclick="startFace()">
+        <input type="button" value="挂断" onclick="endFace()">
+        <input type="button" value="结束考试" onclick="leaveRoom()">
+        面试时长：<span id="time"></span>
+    </div>
+    <hr/>
+    <div id="video_div">
+        <div id="video" class="video"></div>
+    </div>
+</body>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/AgoraRTC_N-4.5.0.js"></script>
+<script>
+    // // 变量初始化
+    // var channel = getUrlQuery('channel');
+    // var user_id = getUrlQuery('user_id');
+    // var name = getUrlQuery('name');
+    // var type = getUrlQuery('type');
+    // var face_token;
+    // var student_list;
+    
+    // // websocket操作
+    // ws = new WebSocket("ws://127.0.0.1:2000");
+    // ws.onopen = function () {
+    //     ws.send(ots({ "send_type": "login", "user_id": user_id, "name": name, "channel": channel, "type": type, "student_token": "123456"}));
+    // };
+    // ws.onmessage = function (e) {
+    //     data = sto(e.data);
+    //     console.log(data);
+
+    //     if (data.send_type == "login") {
+    //         if (data.status == 1) {
+    //             face_token = data.data.face_token
+    //         } else {
+    //             alert(data.message);
+    //             location.href = name + ".html";
+    //         }
+    //     }
+
+    //     if (data.send_type == "list") {
+    //         student_list = "";
+    //         $("#number").html(data.data.list.length);
+    //         for (let i = 0; i < data.data.list.length; i++) {
+    //             student_list += "<p>" + data.data.list[i].name;
+    //             student_list += '<input type="button" value="状态"><input type="button" value="邀请" onclick="startFace(' + data.data.list[i].user_id +')"><input type="button" value="查看信息" onclick="showInfo(' + data.data.list[i].user_id +')">';
+    //             student_list += +"</p>";
+    //         }
+    //         $('#group').html(student_list);
+    //     }
+
+    //     if (data.send_type == "kick") {
+    //         if (is_start) {
+    //             leaveCall();
+    //         }
+    //         alert(data.message);
+    //         location.href = "http://127.0.0.1/yz_facetime/html/" + name + ".html";
+    //     }
+
+    //     if (data.send_type == "start") {
+    //         alert(data.message);
+    //         startCall();
+    //     }
+
+    //     if (data.send_type == "end") {
+    //         alert(data.message);
+    //         leaveCall();
+    //     }
+    };
+    // function kickOut(user_id) {
+    //     ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
+    // }
+    // function startFace(user_id) {
+    //     ws.send(ots({ "send_type": "start", "face_token": face_token, "user_id": user_id }));
+    // }
+    // function endFace(user_id) {
+    //     ws.send(ots({ "send_type": "end", "face_token": face_token, "user_id": user_id }));
+    // }
+
+
+
+
+
+    // // 变量初始化
+    // var agora_token = getUrlQuery('agora_token');
+    // var selectedMicrophoneId = getUrlQuery("selectedMicrophoneId");
+    // var selectedCameraId = getUrlQuery("selectedCameraId");
+    // var rtc = {
+    //     client: null,
+    //     localAudioTrack: null,
+    //     localVideoTrack: null,
+    // };
+    // var options = {
+    //     appId: "d08b76fcc31a44d5b3974f6607bd9a65",
+    //     channel: channel,
+    //     token: agora_token,
+    // };
+    // // var is_start = false;
+
+    // // 状态初始化
+    // startCall();
+
+    // // 创建并加入频道
+    // async function startCall() {
+    //     is_start = true;
+
+    //     // 创建本地客户端
+    //     rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+    //     // 订阅远端用户
+    //     rtc.client.on("user-published", async (user, mediaType) => {
+    //         // 开始订阅远端用户。
+    //         await rtc.client.subscribe(user, mediaType);
+    //         console.log("subscribe success");
+
+    //         // 表示本次订阅的是视频。
+    //         if (mediaType === "video") {
+    //             // 订阅完成后，从 `user` 中获取远端视频轨道对象。
+    //             const remoteVideoTrack = user.videoTrack;
+    //             // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
+    //             const playerContainer = document.createElement("div");
+    //             // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。
+    //             playerContainer.id = user.uid.toString();
+    //             playerContainer.style.width = "640px";
+    //             playerContainer.style.height = "480px";
+    //             document.getElementById("video_div").append(playerContainer);
+
+    //             // 订阅完成，播放远端音视频。
+    //             // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
+    //             remoteVideoTrack.play(playerContainer);
+
+    //             // 也可以只传入该 DIV 节点的 ID。
+    //             // remoteVideoTrack.play(playerContainer.id);
+    //         }
+
+    //         // 表示本次订阅的是音频。
+    //         if (mediaType === "audio") {
+    //             // 订阅完成后，从 `user` 中获取远端音频轨道对象。
+    //             const remoteAudioTrack = user.audioTrack;
+    //             // 播放音频因为不会有画面，不需要提供 DOM 元素的信息。
+    //             remoteAudioTrack.play();
+    //         }
+    //     });
+
+    //     // 取消订阅远端用户
+    //     rtc.client.on("user-unpublished", (user, mediaType) => {
+    //         if (mediaType === "video") {
+    //             // 获取刚刚动态创建的 DIV 节点。
+    //             const playerContainer = document.getElementById(user.uid.toString());
+    //             // 销毁这个节点。
+    //             playerContainer.remove();
+    //         }
+    //     });
+
+    //     // 加入目标频道
+    //     const uid = await rtc.client.join(options.appId, options.channel, options.token, null);
+
+    //     // 创建并发布本地音视频轨道
+    //     const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks({ cameraId: selectedCameraId }, { microphoneId: selectedMicrophoneId });
+    //     rtc.localAudioTrack = localAudioTrack;
+    //     rtc.localVideoTrack = localVideoTrack;
+    //     rtc.localVideoTrack.play("video");
+    //     $("#microphone_status").html("麦克风开启");
+    //     $("#camera_status").html("摄像头开启");
+
+    //     await rtc.client.publish([rtc.localAudioTrack, rtc.localVideoTrack]);
+    // }
+
+    // // 暂时停用启用麦克风采集
+    // async function microphoneSet(flag) {
+    //     await rtc.localAudioTrack.setEnabled(flag);
+    //     if (flag) {
+    //         $("#microphone_status").html("麦克风开启");
+    //     } else {
+    //         $("#microphone_status").html("麦克风关闭");
+    //     }
+    // }
+
+    // // 暂时停用启用摄像头采集
+    // async function cameraSet(flag) {
+    //     await rtc.localVideoTrack.setEnabled(flag);
+    //     if (flag) {
+    //         $("#camera_status").html("摄像头开启");
+    //     } else {
+    //         $("#camera_status").html("摄像头关闭");
+    //     }
+    // }
+
+    // // 离开频道
+    // async function leaveCall() {
+    //     // 销毁本地音视频轨道。
+    //     rtc.localAudioTrack.close();
+    //     rtc.localVideoTrack.close();
+
+    //     // 遍历远端用户。
+    //     rtc.client.remoteUsers.forEach(user => {
+    //         // 销毁动态创建的 DIV 节点。
+    //         const playerContainer = document.getElementById(user.uid);
+    //         playerContainer && playerContainer.remove();
+    //     });
+
+    //     // 清空状态
+    //     $("#microphone_status").html("");
+    //     $("#camera_status").html("");
+
+    //     // 离开频道。
+    //     await rtc.client.leave();
+    // }
+
+
+
+
+    // json对象转json字符串
+    function ots(param) {
+        return JSON.stringify(param)
+    }
+
+    // json字符串转json对象
+    function sto(param) {
+        return JSON.parse(param)
+    }
+
+    // 获取url参数
+    function getUrlQuery(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+</script>
+</html>
