@@ -42,7 +42,7 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     if ($data['send_type'] == "kick") {
         // 验证面试token
-        if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
+        if (!Base::check_face_token($connection, $data['face_token'])) {
             // token验证失败
             $connection->close(Base::error("login", "签名验证失败", 'list'));
             unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
@@ -58,7 +58,7 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     if ($data['send_type'] == "start") {
         // 验证面试token
-        if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
+        if (!Base::check_face_token($connection, $data['face_token'])) {
             // token验证失败
             $connection->close(Base::error("login", "签名验证失败", 'list'));
             unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
@@ -73,7 +73,7 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     if ($data['send_type'] == "end") {
         // 验证面试token
-        if (!$face_token = Base::check_face_token($connection, $data['face_token'])) {
+        if (!Base::check_face_token($connection, $data['face_token'])) {
             // token验证失败
             $connection->close(Base::error("login", "签名验证失败", 'list'));
             unset($ws_worker->channel[$connection->channel][1][$connection->user_id]);
