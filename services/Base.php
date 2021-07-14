@@ -68,21 +68,21 @@ class Base {
      * @param [type] $data
      * @return void
      */
-    public static function check_student_token($db, $data) {
-        if (empty($data['user_id']) || empty($data['student_token'])) {
+    public static function check_user_token($db, $data) {
+        if (empty($data['user_id']) || empty($data['user_token'])) {
             return false;
         }
 
-        // $ims_user = $db->select('user_id')->from('ims_user')->where('token= :token')->bindValues(array('token'=>$data['student_token']))->row();
+        // $ims_user = $db->select('user_id')->from('ims_user')->where('token= :token')->bindValues(array('token'=>$data['user_token']))->row();
         // if (!$ims_user) {
         //     return false;
         // }
 
-        // $student_token = unserialize(self::decrypt($data['student_token']));
-        // if ($student_token['user_id'] != $ims_user['user_id']) {
+        // $user_token = unserialize(self::decrypt($data['user_token']));
+        // if ($user_token['user_id'] != $ims_user['user_id']) {
         //     return false;
         // }
-        // if (time() - $student_token['time'] > 10800) {
+        // if (time() - $user_token['time'] > 10800) {
         //     return false;
         // }
 

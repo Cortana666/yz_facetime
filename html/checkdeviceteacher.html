@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>面试检测</title>
+    <title>设备检测</title>
     <style>
         .video {
             width: 480px;
@@ -42,8 +42,7 @@
     </div>
     <hr/>
     <div>
-        <input id="check" type="checkbox">我确认网络及设备没有问题，进入面试
-        <input id="join" type="button" value="进入考场" disabled>
+        <input id="join" type="button" value="进入考场">
     </div>
 </body>
 <script src="js/jquery-3.6.0.min.js"></script>
@@ -71,8 +70,6 @@
 
     // 状态初始化
     getDevice();
-    selectedMicrophoneId = $("#microphone_device").val();
-    selectedCameraId = $("#camera_device").val();
 
     // 开始网络质量检测
     async function netCheck() {
@@ -158,6 +155,9 @@
             for (let index = 0; index < videoDevices.length; index++) {
                 $("#camera_device").append('<option value="' + videoDevices[index]['deviceId'] + '">' + videoDevices[index]['label'] + '</option>')
             }
+
+            selectedMicrophoneId = $("#microphone_device").val();
+            selectedCameraId = $("#camera_device").val();
         })
     }
 
@@ -204,23 +204,9 @@
         });
     }
 
-    // 确认切换
-    $("#check").change(function () {
-        if ($(this).prop('checked')) {
-            $("#join").attr('disabled', false);
-        } else {
-            $("#join").attr('disabled', true);
-        }
-    });
-
     // 进入考场
     $("#join").click(function() {
-        if (type == 1) {
-            location.href = "facetimeteacher.html?user_id=" + user_id + "&name=" + name + "&type=" + type + "&channel=" + channel + "&agora_token=" + agora_token + "&selectedMicrophoneId=" + selectedMicrophoneId + "&selectedCameraId=" + selectedCameraId;
-        }
-        if (type == 2) {
-            location.href = "facetimestudent.html?user_id=" + user_id + "&name=" + name + "&type=" + type + "&channel=" + channel + "&agora_token=" + agora_token + "&selectedMicrophoneId=" + selectedMicrophoneId + "&selectedCameraId=" + selectedCameraId;
-        }
+        location.href = "facetimeteacher.html?user_id=" + user_id + "&name=" + name + "&type=" + type + "&channel=" + channel + "&agora_token=" + agora_token + "&selectedMicrophoneId=" + selectedMicrophoneId + "&selectedCameraId=" + selectedCameraId;
     });
 
     // 获取url参数

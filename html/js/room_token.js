@@ -1,7 +1,9 @@
 // 设置房间列表页面信息
 var user_name = getUrlQuery("user");
-var match = user_name.match(/([a-z]+)(\d+)/);
-var user_id = match[2];
+var user_name_match = user_name.match(/([a-z]+)(\d+)/);
+var user_id = user_name_match[2];
+var room_name_match;
+var room_id;
 var html = '';
 
 var room_token = {
@@ -10,18 +12,22 @@ var room_token = {
     'room3': '006d08b76fcc31a44d5b3974f6607bd9a65IAAxSmJ7A6MMXvgpGibQ88GxAg+5ACGEIb2SGmVvimD4tAZbfQoAAAAAEAC4541o11fuYAEAAQDXV+5g'
 };
 
-if (match[1] == 'teacher') {
+if (user_name_match[1] == 'teacher') {
     var user_type = 1;
 }
-if (match[1] == 'student') {
+if (user_name_match[1] == 'student') {
     var user_type = 2;
 }
 
+
 for (let room_name in room_token) {
+    room_name_match = room_name.match(/([a-z]+)(\d+)/);
+    room_id = room_name_match[2];
+    
     html += '<tr>\
             <td>'+ room_name + '</td>\
             <td>\
-                <a href="checkstudent.html?user_id='+ user_id + '&name=' + user_name + '&type=' + user_type + '&channel=' + room_name + '&agora_token=' + room_token[room_name] + '">进入房间</a>\
+                <a href="checkdevice' + user_name_match[1] + '.html?user_id=' + user_id + '&name=' + user_name + '&type=' + user_type + '&channel=' + room_id + '&agora_token=' + room_token[room_name] + '">进入房间</a>\
             </td>\
         </tr>';
 }
