@@ -17,49 +17,74 @@ use Services\Base;
  */
 class Worker {
     /**
+     * 初始化当前channel（考场）
+     *
+     * @author yangjian
+     * @date   2021-07-15
+     * @param [type] $ws_worker
+     * @return void
+     */
+    public static function init(&$ws_worker, $db, $connection) {
+        // 初始化房间
+        if (!isset($ws_worker->room[$connection->room_id])) {
+            $ws_worker->room[$connection->room_id] = array();
+
+            $members = $db->select('member_id,type')->from('face_room_member')->where('room_id= :room_id')->bindValues(array('room_id' => $connection->room_id))->query();
+            if ($members) {
+                foreach ($members as $value) {
+                    if ($value['type'] == 1) {
+                        $teacher_ids[$value['member_id']] = $value['type'];
+                    }
+                    if ($value['type'] == 2) {
+                        $student_ids[] = $value['member_id'];
+                    }
+                    if ($value['type'] == 3) {
+                        $teacher_ids[$value['member_id']] = $value['type'];
+                    }
+                }
+            }
+
+            if ($teacher_ids) {
+                $teachers = $db->select('user_id')->from('face_teacher')->where('user_id in ('.implode(',', array_keys($teacher_ids)).')')->query();
+                foreach ($teachers as $key => $value) {
+                    $ws_worker->room[$connection->room_id]['user_id'] = [
+                        'connection' => '',
+                        'type' => $teacher_ids[$value['user_id']]
+                    ];
+                }
+            }
+            if ($student_ids) {
+                $students = $db->select('user_id,name,card_id,bk_college,bk_special')->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
+                foreach ($students as $key => $value) {
+                    $ws_worker->room[$connection->room_id]['user_id'] = [
+                        'connection' => '',
+                        'type' => 2,
+                        'status' => '1',
+                        'step' => '1',
+                    ];
+                }
+            }
+        }
+    }
+
+    /**
      * 建立关联
      *
      * @author yangjian
-     * @date   2021-07-08
-     * @param [type] $data
+     * @date   2021-07-15
+     * @param [type] $ws_worker
      * @param [type] $connection
+     * @param [type] $data
      * @return void
      */
-    public static function build_link(&$ws_worker, &$connection, $data) {
-        // 初始化房间
-        if (!isset($ws_worker->channel[$data['channel']])) {
-            $ws_worker->channel[$data['channel']] = array();
-            $ws_worker->channel[$data['channel']][1] = array();
-            $ws_worker->channel[$data['channel']][2] = array();
-        }
+    public static function set_connection(&$ws_worker, $db, &$connection) {
+        statis::init($ws_worker, $db, $connection);
 
-        // 个人数据关联
-        $connection->user_id = $data['user_id'];
-        $connection->channel = $data['channel'];
-        $connection->type = $data['type'];
+        $ws_worker->room[$connection->user_id][$connection->user_id]['connection'] = $connection;
+        $ws_worker->room[$connection->user_id][$connection->user_id]['status'] = 2;
 
-
-        if (!isset($ws_worker->channel[$data['channel']][$data['type']][$data['user_id']])) {
-            // 建立user_id与wolakerman对应
-            if (!isset($ws_worker->channel[$data['channel']][$data['type']])) {
-                $connection->close(Base::error("login", "账号类型错误", 'list'));
-            } else {
-                $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['connection'] = $connection;
-                $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['user_id'] = $data['user_id'];
-                $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['status'] = 1;
-                $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['leave_status'] = 0;
-                $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['face_time'] = 0;
-            }
-        } else {
-            $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['connection'] = $connection;
-            $leave_status = $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['leave_status'];
-            $ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['status'] = $leave_status;
-        }
-
-        if ($data['type'] == 2) {
-            if ($ws_worker->channel[$data['channel']][$data['type']][$data['user_id']]['status'] == 2) {
-                $connection->send(Base::success("doinvite", "开始面试"));
-            }
+        if ($ws_worker->room[$connection->user_id][$connection->user_id]['step'] == 2) {
+            $connection->send(Base::success("cStart", "开始面试"));
         }
     }
 

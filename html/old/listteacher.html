@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>教室名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/public.js"></script>
+<script src="js/room_token.js"></script>
+<script>
+    // 存储数据
+    localStorage.setItem('type', 1)
+    localStorage.setItem('user_token', '123456');
+    localStorage.setItem('user_id', getUrlQuery('user_id'));
+
+    // 初始化房间列表
+    for (let room_id in room_token) {
+        $('tbody').append(
+'            <tr>\
+                <td>'+ room_token[room_id].room_name+'</td>\
+                <td>\
+                    <a href="deviceteacher.html?room_id=' + room_id + '">进入考场</a>\
+                </td>\
+            </tr>'
+        );
+    }
+</script>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>教师面试</title>
+    <title>学生面试</title>
     <style>
         .video {
             width: 480px;
@@ -20,41 +20,40 @@
     </style>
 </head>
 <body>
-    <div>
-        姓名：<p></p>
-        证件号码：<p></p>
-        人脸识别状态：<p></p>
-    </div>
-    <div>
-        房间学生人数：<span id="online">0</span>/<span id="number"></span>
-        <div id="group">
-            
+    <div id="wait">
+        <div>
+            <p>您的位置是<span id="position"></span></p>
+            <p>前面还有<span id="wait_number"></span>位等候</p>
+            <p>预计<span id="wait_time"></span>分钟后面试</p>
+            <p>PS:预计时间实时更新，如等候人没有参加面试，等待时间会减少，正在面试的人时长增加，等待时间也会增加。</p>
+            <p>如错过面试，将会排到最后进行面试</p>
+        </div>
+        <div>
+            <input id="join" type="button" value="接受邀请" style="display: none;" onclick="cJoin()">
         </div>
     </div>
-    <hr/>
-    <div>
-        <span id="microphone_status"></span>
-        <input type="button" value="麦克风关闭" onclick="cMicrophoneSet(false)">
-        <input type="button" value="麦克风开启" onclick="cMicrophoneSet(true)">
-        <span id="camera_status"></span>
-        <input type="button" value="摄像头关闭" onclick="cCameraSet(false)">
-        <input type="button" value="摄像头开启" onclick="cCameraSet(true)">
-        <input type="button" value="开启屏幕共享" onclick="cStartShare()">
-        <input type="button" value="关闭屏幕共享" onclick="cEndShare()">
-        <input type="button" value="邀请" onclick="wsInvite('')">
-        <input type="button" value="挂断" onclick="wsHung()">
-        <input type="button" value="结束考试" onclick="wsFinish()">
-        面试时长：<span id="time"></span>
-    </div>
-    <hr/>
-    <div id="video_div">
-        <div id="video" class="video"></div>
+    <div id="face" style="display: none;">
+        <div>
+            <span id="microphone_status"></span>
+            <input type="button" value="麦克风关闭" onclick="cMicrophoneSet(false)">
+            <input type="button" value="麦克风开启" onclick="cMicrophoneSet(true)">
+            <span id="camera_status"></span>
+            <input type="button" value="摄像头关闭" onclick="cCameraSet(false)">
+            <input type="button" value="摄像头开启" onclick="cCameraSet(true)">
+            <input type="button" value="开启屏幕共享" onclick="cStartShare()">
+            <input type="button" value="关闭屏幕共享" onclick="cEndShare()">
+            <input type="button" value="挂断" onclick="wsHung()">
+        </div>
+        <hr/>
+        <div id="video_div">
+            <div id="video" class="video"></div>
+        </div>
     </div>
 </body>
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/AgoraRTC_N-4.5.0.js"></script>
 <script>
-    // 变量初始化
+    // // 变量初始化
     var channel = getUrlQuery('channel');
     var user_id = getUrlQuery('user_id');
     var name = getUrlQuery('name');
@@ -64,6 +63,7 @@
     var last_message_time;
     var online_number;
     var face_token;
+    var is_invite = false;
     
     // websocket操作
     ws = new WebSocket("ws://127.0.0.1:2000");
@@ -72,14 +72,14 @@
     };
 
     setInterval(function () {
-        ws.send(ots({ "send_type": "ping"}));
+        ws.send(ots({ "send_type": "ping" }));
         if (new Date().getTime() - last_message_time > heartbeat_time) {
             alert("您已断开连接，请重新进入房间！");
             clearInterval();
             location.href = "list.html?user=" + name;
         }
     }, 10000);
-    
+
     ws.onmessage = function (e) {
         last_message_time = new Date().getTime();
 
@@ -95,34 +95,25 @@
             }
         }
 
-        if (data.send_type == "list") {
-            student_list = "";
-            $("#number").html(data.data.list.length);
-            for (let i = 0; i < data.data.list.length; i++) {
-                student_list += '<p>' + data.data.list[i]['name'];
-                student_list += ' <span id="'+ data.data.list[i]['user_id']+'_status">未连接</span><input type="button" value="邀请" onclick="wsInvite(' + data.data.list[i]['user_id'] +')"><input type="button" value="查看信息" onclick="wsShowInfo(' + data.data.list[i]['user_id'] +')">';
-                student_list += '</p>';
-            }
-            $('#group').html(student_list);
+        if (data.send_type == "wait") {
+            $('#position').html(data.data.status.position);
+            $('#wait_number').html(data.data.status.wait_number);
+            $('#wait_time').html(data.data.status.wait_time);
         }
 
-        if (data.send_type == "status") {
-            online_number = 0;
-            for (let i = 0; i < data.data.status.length; i++) {
-                if (data.data.status[i]['status'] == 1) {
-                    online_number ++;
-                    $('#' + data.data.status[i]['user_id'] + '_status').html('已连接');
-                } else if (data.data.status[i]['status'] == 2) {
-                    online_number++;
-                    $('#' + data.data.status[i]['user_id'] + '_status').html('正在面试');
-                } else if (data.data.status[i]['status'] == 3) {
-                    online_number++;
-                    $('#' + data.data.status[i]['user_id'] + '_status').html('面试完成');
-                } else {
-                    $('#' + data.data.status[i]['user_id'] + '_status').html('未连接');
+        if (data.send_type == "invite") {
+            alert(data.message);
+            $('#join').show();
+            setInterval(function(){
+                if (!is_invite) {
+                    ws.send(ots({ "send_type": "close" }));
+                    clearInterval();
                 }
-            }
-            $('#online').html(online_number);
+            }, 30000);
+        }
+
+        if (data.send_type == "doinvite") {
+            cJoin();
         }
 
     //     if (data.send_type == "kick") {
@@ -133,25 +124,30 @@
     //         location.href = "http://127.0.0.1/yz_facetime/html/" + name + ".html";
     //     }
 
-    //     if (data.send_type == "start") {
-    //         alert(data.message);
-    //         startCall();
-    //     }
-
     //     if (data.send_type == "end") {
     //         alert(data.message);
     //         leaveCall();
     //     }
     };
-    function wsInvite(user_id) {
-        ws.send(ots({ "send_type": "invite", "face_token": face_token, "user_id": user_id }));
+    function cJoin() {
+        $("#wait").hide();
+        $("#face").show();
+        ws.send(ots({ "send_type": "doinvite", "face_token": face_token }));
+        is_invite = true;
+        cStartCall();
     }
-    function wsHung(user_id) {
-        ws.send(ots({ "send_type": "end", "face_token": face_token, "user_id": user_id }));
-    }
-    function wsFinish() {
-        ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
-    }
+    // function kickOut(user_id) {
+    //     ws.send(ots({ "send_type": "kick", "face_token": face_token, "user_id": user_id}));
+    // }
+    // function startFace(user_id) {
+    //     ws.send(ots({ "send_type": "start", "face_token": face_token, "user_id": user_id }));
+    // }
+    // function endFace(user_id) {
+    //     ws.send(ots({ "send_type": "end", "face_token": face_token, "user_id": user_id }));
+    // }
+
+
+
 
 
     // 变量初始化
@@ -168,9 +164,6 @@
         channel: channel,
         token: agora_token,
     };
-
-    // 状态初始化
-    cStartCall();
 
     // 创建并加入频道
     async function cStartCall() {
@@ -290,15 +283,9 @@
     }
 
 
-    // json对象转json字符串
-    function ots(param) {
-        return JSON.stringify(param)
-    }
 
-    // json字符串转json对象
-    function sto(param) {
-        return JSON.parse(param)
-    }
+
+    
 
     // 获取url参数
     function getUrlQuery(variable) {

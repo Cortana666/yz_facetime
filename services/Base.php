@@ -32,7 +32,7 @@ class Base {
      * @date   2021-07-08
      * @return void
      */
-    private static function get_eol_salt() {
+    public static function get_eol_salt() {
         return 'eol@2021#kw$salt';
     }
 
@@ -58,39 +58,6 @@ class Base {
      */
     public static function decrypt($data) {
         return openssl_decrypt($data, 'aes-256-cfb', self::get_eol_key(), 0, self::get_eol_salt());
-    }
-
-    /**
-     * 验证学生端token并返回面试token
-     *
-     * @author yangjian
-     * @date   2021-07-08
-     * @param [type] $data
-     * @return void
-     */
-    public static function check_user_token($db, $data) {
-        if (empty($data['user_id']) || empty($data['user_token'])) {
-            return false;
-        }
-
-        // $ims_user = $db->select('user_id')->from('ims_user')->where('token= :token')->bindValues(array('token'=>$data['user_token']))->row();
-        // if (!$ims_user) {
-        //     return false;
-        // }
-
-        // $user_token = unserialize(self::decrypt($data['user_token']));
-        // if ($user_token['user_id'] != $ims_user['user_id']) {
-        //     return false;
-        // }
-        // if (time() - $user_token['time'] > 10800) {
-        //     return false;
-        // }
-
-        $face_token['user_id'] = $data['user_id'];
-        $face_token['channel'] = $data['channel'];
-        $face_token['time'] = time();
-
-        return self::encrypt(serialize($face_token));
     }
 
     /**
@@ -133,35 +100,5 @@ class Base {
         $return['data'] = $data;
 
         return json_encode($return);
-    }
-
-    /**
-     * 验证面试token
-     *
-     * @author yangjian
-     * @date   2021-07-08
-     * @param [type] $token
-     * @return void
-     */
-    public static function check_face_token($connection, $token = '') {
-        if (!$token) {
-            return false;
-        }
-
-        $token = unserialize(self::decrypt($token));
-
-        if ($token['user_id'] != $connection->user_id) {
-            return false;
-        }
-
-        if ($token['channel'] != $connection->channel) {
-            return false;
-        }
-
-        if (time() - $token['time'] > 10800) {
-            return false;
-        }
-
-        return true;
     }
 }
