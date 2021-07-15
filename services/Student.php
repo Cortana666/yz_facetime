@@ -23,7 +23,7 @@ class Student {
      * @date   2021-07-15
      * @return void
      */
-    public static function s_get_status() {
+    public static function s_get_status(&$ws_worker, $db, $connection, $data) {
 
     }
 
@@ -34,7 +34,7 @@ class Student {
      * @date   2021-07-15
      * @return void
      */
-    public static function s_set_start() {
+    public static function s_set_start(&$ws_worker, $db, $connection, $data) {
 
     }
 
@@ -45,7 +45,7 @@ class Student {
      * @date   2021-07-15
      * @return void
      */
-    public static function s_set_end() {
+    public static function s_set_end(&$ws_worker, $db, $connection, $data) {
 
     }
 }
