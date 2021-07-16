@@ -17,123 +17,44 @@ use Services\Base;
  */
 class Teacher {
     /**
-     * 初始化当前channel（考场）
+     * 教师登录
      *
      * @author yangjian
      * @date   2021-07-15
      * @param [type] $ws_worker
-     * @return void
-     */
-    public static function init(&$ws_worker, $db, $connection) {
-        // 初始化房间
-        if (!isset($ws_worker->room[$connection->room_id])) {
-            $ws_worker->room[$connection->room_id] = array();
-
-            $members = $db->select('member_id,type')->from('face_room_member')->where('room_id= :room_id')->bindValues(array('room_id' => $connection->room_id))->query();
-            if ($members) {
-                foreach ($members as $value) {
-                    if ($value['type'] == 1) {
-                        $teacher_ids[$value['member_id']] = $value['type'];
-                    }
-                    if ($value['type'] == 2) {
-                        $student_ids[] = $value['member_id'];
-                    }
-                    if ($value['type'] == 3) {
-                        $teacher_ids[$value['member_id']] = $value['type'];
-                    }
-                }
-            }
-
-            if ($teacher_ids) {
-                $teachers = $db->select('user_id')->from('face_teacher')->where('user_id in ('.implode(',', array_keys($teacher_ids)).')')->query();
-                foreach ($teachers as $key => $value) {
-                    $ws_worker->room[$connection->room_id]['user_id'] = [
-                        'connection' => '',
-                        'type' => $teacher_ids[$value['user_id']]
-                    ];
-                }
-            }
-            if ($student_ids) {
-                $students = $db->select('user_id,name,card_id,bk_college,bk_special')->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
-                foreach ($students as $key => $value) {
-                    $ws_worker->room[$connection->room_id]['user_id'] = [
-                        'connection' => '',
-                        'type' => 2,
-                        'status' => '1',
-                        'step' => '1',
-                    ];
-                }
-            }
-        }
-    }
-
-    /**
-     * 断开连接
-     *
-     * @author yangjian
-     * @date   2021-07-08
+     * @param [type] $db
+     * @param [type] $connection
      * @param [type] $data
      * @return void
      */
-    public static function s_close($connection, $message) {
-        $connection->send(Base::error('cLeave', $message));
+    public function s_login(&$ws_worker, $db, &$connection, $data) {
+        Base::s_check_token($connection, $data);
+        Base::init($ws_worker, $db, $connection);
+        Base::s_set_connection($ws_worker, $connection);
     }
 
     /**
-     * 验证Token
+     * 获取学生列表
      *
      * @author yangjian
-     * @date   2021-07-08
+     * @date   2021-07-15
+     * @param [type] $ws_worker
+     * @param [type] $db
+     * @param [type] $connection
      * @param [type] $data
      * @return void
      */
-    public static function s_check_token(&$ws_worker, $db, &$connection, $data) {
-        // $user_token = unserialize(Base::decrypt($data['user_token']));
-        // if (time() - $user_token['time'] > 10800) {
-        //     static::s_close($ws_worker, $db, $connection, $data);
-        // }
-
-        $connection->user_id = $data['user_id'];
-        $connection->room_id = $data['room_id'];
-        $connection->type = $data['type'];
-
-        statis::init($ws_worker, $db, $connection);
-
-        $ws_worker->room[$connection->user_id][$connection->user_id]['connection'] = $connection;
-        $ws_worker->room[$connection->user_id][$connection->user_id]['status'] = 2;
-
-        if ($ws_worker->room[$connection->user_id][$connection->user_id]['step'] == 2) {
-            $connection->send(Base::success("cStart", "开始面试"));
+    public static function s_get_student($ws_worker, $db, $connection, $data) {
+        $face_user = $ws_worker->room[$connection->room_id];
+        $student_list = array();
+        foreach ($face_user as $key => $value) {
+            if ($value['type'] == 2) {
+                $student_list[] = $value;
+            }
         }
+
+        $connection->send(Base::success('cStudentList', '获取成功', '', $student_list));
     }
-
-    // /**
-    //  * 获取学生列表
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-14
-    //  * @param [type] $db
-    //  * @return void
-    //  */
-    // private static function get_student_list($ws_worker, $db, $connection) {
-    //     if (!$face_student = $ws_worker->student_list) {
-    //         // 获取房间内学生id
-    //         $student_ids = $db->select('student_id')->from('face_room_student')->where('room_id= :room_id')->bindValues(array('room_id'=>$connection->channel))->query();
-    //         if ($student_ids) {
-    //             $student_ids = array_column($student_ids, 'student_id');
-    //         }
-
-    //         // 获取账号名称
-    //         $face_student = array();
-    //         if ($student_ids) {
-    //             $face_student = $db->select('student_id,user_id,name,card_id')->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
-    //         }
-
-    //         $ws_worker->student_list = $face_student;
-    //     }
-
-    //     return $face_student;
-    // }
 
     // /**
     //  * 广播房间学生列表

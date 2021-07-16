@@ -17,6 +17,21 @@ use Services\Base;
  */
 class Student {
     /**
+     * 考生状态恢复
+     *
+     * @author yangjian
+     * @date   2021-07-15
+     * @param [type] $ws_worker
+     * @param [type] $connection
+     * @return void
+     */
+    public static function init(&$ws_worker, $connection) {
+        if ($ws_worker->room[$connection->user_id][$connection->user_id]['step'] == 2) {
+            $connection->send(Base::success("cStart", "开始面试"));
+        }
+    }
+
+    /**
      * 发送学生等待页状态(单播/广播)
      *
      * @author lizg

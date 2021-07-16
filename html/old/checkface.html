@@ -43,6 +43,7 @@
 
     // 进入考场
     $("#join").click(function() {
+        localStorage.setItem('face_status', $('#face_status').html());
         location.href = "facestudent.html";
     });
 </script>
