@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师面试</title>
+    <style>
+        .video {
+            width: 480px;
+            height: 320px;
+        }
+
+        @media (max-width: 640px) {
+            .video {
+                width: 320px;
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        姓名：<p></p>
+        证件号码：<p></p>
+        人脸识别状态：<p></p>
+    </div>
+    <div>
+        房间学生人数：<span id="online">0</span>/<span id="number"></span>
+        <div id="group">
+            
+        </div>
+    </div>
+    <hr/>
+    <div>
+        <span id="microphone_status"></span>
+        <input type="button" value="麦克风关闭" onclick="cMicrophoneSet(false)">
+        <input type="button" value="麦克风开启" onclick="cMicrophoneSet(true)">
+        <span id="camera_status"></span>
+        <input type="button" value="摄像头关闭" onclick="cCameraSet(false)">
+        <input type="button" value="摄像头开启" onclick="cCameraSet(true)">
+        <input type="button" value="开启屏幕共享" onclick="cStartShare()">
+        <input type="button" value="关闭屏幕共享" onclick="cEndShare()">
+        <input type="button" value="邀请" onclick="wsInvite('')">
+        <input type="button" value="挂断" onclick="wsHung()">
+        <input type="button" value="结束考试" onclick="wsFinish()">
+        面试时长：<span id="time"></span>
+    </div>
+    <hr/>
+    <div id="video_div">
+        <div id="video" class="video"></div>
+    </div>
+</body>
+<script src="js/public.js"></script>
+<script src="js/room_token.js"></script>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/AgoraRTC_N-4.5.0.js"></script>
+<script src="js/agora_func.js"></script>
+<script src="js/websocket_teacher.js"></script>
+<script>
+    // 状态初始化
+    agoraStartCall();
+</script>
+</html>
