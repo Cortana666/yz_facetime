@@ -5,7 +5,7 @@ namespace Services;
 /**
  * 推送数据类
  *
- * @package   Send
+ * @package   Student
  * @author    yangjian
  * @date      2021-07-08
  * @copyright 中教智网
@@ -13,7 +13,33 @@ namespace Services;
  * @link      http://www.eol.cn
  * @since     Version 2.0
  */
-class Send {
+class Student {
+    /**
+     * 获取等待信息
+     *
+     * @author yangjian
+     * @date   2021-07-23
+     * @return void
+     */
+    public static function getWait() {
+
+    }
+
+    /**
+     * 获取等待信息
+     *
+     * @author yangjian
+     * @date   2021-07-23
+     * @return void
+     */
+    public static function getWait() {
+
+    }
+
+
+
+
+
     /**
      * 发送学生状态
      *

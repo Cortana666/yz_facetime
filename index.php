@@ -4,6 +4,8 @@ use Workerman\Worker;
 use Workerman\Lib\Timer;
 Use Services\Base;
 Use Services\Init;
+Use Services\Get;
+Use Services\Send;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -28,13 +30,17 @@ $ws_worker->onWorkerStart = function ($ws_worker) {
     global $db;
     $db = new \Workerman\MySQL\Connection('82.156.126.93', '3306', 'remote', 'Qwer1234;', 'yz_kaowu');
 
-    // 定时器心跳检测
+    // 定时器心跳检测发送心跳
     Timer::add(10, function()use($ws_worker){
+        // 发送心跳
+        Base::heart();
+
+        // 心跳检测
         $time_now = time();
         foreach($ws_worker->connections as $connection) {
             $connection->send(Base::success("pong"));
             if ($time_now - $connection->lastMessageTime > HEARTBEAT_TIME) {
-                Base::closeConnection();
+                Init::closeConnection();
             }
         }
     });
@@ -51,11 +57,15 @@ $ws_worker->onMessage = function ($connection, $data) {
     // 解析json
     $data = json_decode($data, true);
 
-    Base::{$data['send_type']}();
+    // if ($data['send_type'] == 'get') {
+    //     Get::$data['send_type']
+    // }
+
+    // Base::{$data['send_type']}();
 };
 
 $ws_worker->onClose = function ($connection) {
-    Base::sendStatus();
+    Send::status();
 };
 
 
