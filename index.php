@@ -2,27 +2,24 @@
 
 use Workerman\Worker;
 use Workerman\Lib\Timer;
-Use Services\Worker as WorkerService;
+Use Services\Base;
+Use Services\Init;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('HEARTBEAT_TIME', 60);
-
-$service_list = [
-    's_check_token',
-];
-
+// 连接心跳超时时间
+define('HEARTBEAT_TIME', 30);
 
 $ws_worker = new Worker("websocket://0.0.0.0:2000");
-
 $ws_worker->count = 1;
 
+// 考场数据
 $ws_worker->room = array();
 
 $worker->onConnect = function ($connection) {
     // 30秒内未发送token断开连接
     $connection->auth_timer_id = Timer::add(30, function()use($connection){
-        $connection->close(Base::success("cLogout", "未接收到Token"));
+        Init::closeConnection();
     }, null, false);
 };
 
@@ -31,13 +28,13 @@ $ws_worker->onWorkerStart = function ($ws_worker) {
     global $db;
     $db = new \Workerman\MySQL\Connection('82.156.126.93', '3306', 'remote', 'Qwer1234;', 'yz_kaowu');
 
-    // 心跳检测
+    // 定时器心跳检测
     Timer::add(10, function()use($ws_worker){
         $time_now = time();
         foreach($ws_worker->connections as $connection) {
             $connection->send(Base::success("pong"));
             if ($time_now - $connection->lastMessageTime > HEARTBEAT_TIME) {
-                $connection->close(Base::error("cLeave", "系统检测到您在考场中出现问题，请重新进入考场"));
+                Base::closeConnection();
             }
         }
     });
@@ -53,15 +50,12 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     // 解析json
     $data = json_decode($data, true);
-    if (!in_array($data['send_type'], $service_list)) {
-        $connection->send(Base::error("cMessage", "功能不存在"));
-    }
-    
-    WorkerService::{$data['send_type']}($ws_worker, $db, $connection, $data);
+
+    Base::{$data['send_type']}();
 };
 
 $ws_worker->onClose = function ($connection) {
-    
+    Base::sendStatus();
 };
 
 
