@@ -75,7 +75,6 @@ class Base {
         $return['status'] = 2;
         $return['send_type'] = $send_type;
         $return['message'] = $message;
-        $return['url'] = $url;
         $return['data'] = $data;
 
         return json_encode($return);
@@ -96,7 +95,6 @@ class Base {
         $return['status'] = 1;
         $return['send_type'] = $send_type;
         $return['message'] = $message;
-        $return['url'] = $url;
         $return['data'] = $data;
 
         return json_encode($return);
@@ -117,7 +115,6 @@ class Base {
         $return['status'] = 1;
         $return['send_type'] = 'heart';
         $return['message'] = '';
-        $return['url'] = '';
         $return['data'] = '';
 
         return json_encode($return);

@@ -21,7 +21,7 @@ $ws_worker->room = array();
 $worker->onConnect = function ($connection) {
     // 30秒内未发送token断开连接
     $connection->auth_timer_id = Timer::add(30, function()use($connection){
-        Init::closeConnection();
+        $connection->close(Base::error('token', '未接受到登录信息'));
     }, null, false);
 };
 
@@ -38,9 +38,9 @@ $ws_worker->onWorkerStart = function ($ws_worker) {
         // 心跳检测
         $time_now = time();
         foreach($ws_worker->connections as $connection) {
-            $connection->send(Base::success("pong"));
+            $connection->send(Base::heart());
             if ($time_now - $connection->lastMessageTime > HEARTBEAT_TIME) {
-                Init::closeConnection();
+                $connection->close(Base::error('heart', '未检测到心跳'));
             }
         }
     });
@@ -57,15 +57,28 @@ $ws_worker->onMessage = function ($connection, $data) {
     // 解析json
     $data = json_decode($data, true);
 
-    // if ($data['send_type'] == 'get') {
-    //     Get::$data['send_type']
-    // }
-
-    // Base::{$data['send_type']}();
+    if ($data['send_type'] == 'token') {
+        Connection::setConnection();
+    } else {
+        switch ($connection->type) {
+            case '1':
+                Teacher::$data['send_type']();
+                break;
+            case '2':
+                Student::$data['send_type']();
+                break;
+            case '3':
+                Controller::$data['send_type']();
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
 };
 
 $ws_worker->onClose = function ($connection) {
-    Send::status();
+    Connection::closeConnection();
 };
 
 
