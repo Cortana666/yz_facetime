@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => '65db2691a1de39fd9d90b16a9ce4112ade88d967',
+        'name' => '__root__',
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '65db2691a1de39fd9d90b16a9ce4112ade88d967',
+            'dev_requirement' => false,
+        ),
+        'workerman/mysql' => array(
+            'pretty_version' => 'v1.0.6',
+            'version' => '1.0.6.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../workerman/mysql',
+            'aliases' => array(),
+            'reference' => '28272aa68f9ea1a482f9bb0cf709d169f772d228',
+            'dev_requirement' => false,
+        ),
+        'workerman/workerman' => array(
+            'pretty_version' => 'v4.0.19',
+            'version' => '4.0.19.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../workerman/workerman',
+            'aliases' => array(),
+            'reference' => 'af6025976fba817eeb4d5fbf8d0c1059a5819da3',
+            'dev_requirement' => false,
+        ),
+    ),
+);

@@ -1,0 +1,105 @@
+2021-08-23 08:25:15 pid:12263 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:25:21 pid:12264 Worker[12264] process terminated with ERROR: E_ERROR "Uncaught Error: Class 'Services\Base' not found in /Volumes/Box/Developement/Workerman/yz_facetime/index.php:35
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(232): {closure}()
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(281): Workerman\Events\Select->tick()
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\ in /Volumes/Box/Developement/Workerman/yz_facetime/index.php on line 35"
+2021-08-23 08:25:21 pid:12263 worker[none:12264] exit with status 65280
+2021-08-23 08:26:30 pid:12263 Workerman[index.php] stopping ...
+2021-08-23 08:26:30 pid:12263 Workerman[index.php] has been stopped
+2021-08-23 08:26:30 pid:12945 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:41:57 pid:12945 Workerman[index.php] stopping ...
+2021-08-23 08:41:57 pid:12945 Workerman[index.php] has been stopped
+2021-08-23 08:41:58 pid:21647 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:43:04 pid:21647 Workerman[index.php] stopping ...
+2021-08-23 08:43:04 pid:21647 Workerman[index.php] has been stopped
+2021-08-23 08:44:12 pid:22924 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:44:43 pid:22924 Workerman[index.php] stopping ...
+2021-08-23 08:44:43 pid:22924 Workerman[index.php] has been stopped
+2021-08-23 08:44:43 pid:23232 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:46:21 pid:23232 Workerman[index.php] stopping ...
+2021-08-23 08:46:21 pid:23232 Workerman[index.php] has been stopped
+2021-08-23 08:46:22 pid:24169 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:47:24 pid:24169 Workerman[index.php] stopping ...
+2021-08-23 08:47:24 pid:24169 Workerman[index.php] has been stopped
+2021-08-23 08:49:06 pid:25647 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:49:21 pid:25647 Workerman[index.php] stopping ...
+2021-08-23 08:49:21 pid:25647 Workerman[index.php] has been stopped
+2021-08-23 08:50:11 pid:26245 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:50:31 pid:26246 Worker[26246] process terminated
+2021-08-23 08:51:07 pid:26245 Workerman[index.php] stopping ...
+2021-08-23 08:51:07 pid:26245 Workerman[index.php] has been stopped
+2021-08-23 08:51:08 pid:26801 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:52:33 pid:26801 Workerman[index.php] stopping ...
+2021-08-23 08:52:33 pid:26801 Workerman[index.php] has been stopped
+2021-08-23 08:52:34 pid:27568 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:53:48 pid:27568 Workerman[index.php] stopping ...
+2021-08-23 08:53:48 pid:27568 Workerman[index.php] has been stopped
+2021-08-23 08:53:48 pid:28268 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:54:31 pid:28268 Workerman[index.php] stopping ...
+2021-08-23 08:54:31 pid:28268 Workerman[index.php] has been stopped
+2021-08-23 08:54:32 pid:28684 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:55:53 pid:28684 Workerman[index.php] stopping ...
+2021-08-23 08:55:53 pid:28684 Workerman[index.php] has been stopped
+2021-08-23 08:55:53 pid:29470 Workerman[index.php] start in DEBUG mode
+2021-08-23 08:58:41 pid:29470 Workerman[index.php] stopping ...
+2021-08-23 08:58:41 pid:29470 Workerman[index.php] has been stopped
+2021-08-23 08:58:41 pid:31033 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:00:09 pid:31033 Workerman[index.php] stopping ...
+2021-08-23 09:00:09 pid:31033 Workerman[index.php] has been stopped
+2021-08-23 09:00:09 pid:31866 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:00:54 pid:31866 Workerman[index.php] stopping ...
+2021-08-23 09:00:54 pid:31866 Workerman[index.php] has been stopped
+2021-08-23 09:00:56 pid:32282 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:01:48 pid:32282 Workerman[index.php] stopping ...
+2021-08-23 09:01:48 pid:32282 Workerman[index.php] has been stopped
+2021-08-23 09:01:48 pid:32763 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:04:35 pid:32763 Workerman[index.php] stopping ...
+2021-08-23 09:04:35 pid:32763 Workerman[index.php] has been stopped
+2021-08-23 09:04:35 pid:34293 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:06:31 pid:34293 Workerman[index.php] stopping ...
+2021-08-23 09:06:31 pid:34293 Workerman[index.php] has been stopped
+2021-08-23 09:06:32 pid:35345 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:15:24 pid:35345 Workerman[index.php] stopping ...
+2021-08-23 09:15:24 pid:35345 Workerman[index.php] has been stopped
+2021-08-23 09:15:25 pid:40275 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:16:55 pid:40275 Workerman[index.php] stopping ...
+2021-08-23 09:16:55 pid:40275 Workerman[index.php] has been stopped
+2021-08-23 09:16:55 pid:41243 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:17:07 pid:41243 Workerman[index.php] stopping ...
+2021-08-23 09:17:07 pid:41243 Workerman[index.php] has been stopped
+2021-08-23 09:21:59 pid:44104 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:22:31 pid:44104 Workerman[index.php] stopping ...
+2021-08-23 09:22:31 pid:44104 Workerman[index.php] has been stopped
+2021-08-23 09:22:32 pid:44420 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:22:41 pid:44420 Workerman[index.php] stopping ...
+2021-08-23 09:22:41 pid:44420 Workerman[index.php] has been stopped
+2021-08-23 09:22:42 pid:44506 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:23:22 pid:44506 Workerman[index.php] stopping ...
+2021-08-23 09:23:22 pid:44506 Workerman[index.php] has been stopped
+2021-08-23 09:27:03 pid:46893 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:27:45 pid:46893 Workerman[index.php] stopping ...
+2021-08-23 09:27:45 pid:46893 Workerman[index.php] has been stopped
+2021-08-23 09:28:21 pid:47655 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:28:48 pid:47655 Workerman[index.php] stopping ...
+2021-08-23 09:28:48 pid:47655 Workerman[index.php] has been stopped
+2021-08-23 09:29:02 pid:48058 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:31:12 pid:48058 Workerman[index.php] stopping ...
+2021-08-23 09:31:12 pid:48058 Workerman[index.php] has been stopped
+2021-08-23 09:31:13 pid:49244 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:31:44 pid:49244 Workerman[index.php] stopping ...
+2021-08-23 09:31:44 pid:49244 Workerman[index.php] has been stopped
+2021-08-23 09:31:45 pid:49641 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:33:14 pid:49641 Workerman[index.php] stopping ...
+2021-08-23 09:33:14 pid:49641 Workerman[index.php] has been stopped
+2021-08-23 09:33:15 pid:50485 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:34:14 pid:50485 Workerman[index.php] stopping ...
+2021-08-23 09:34:14 pid:50485 Workerman[index.php] has been stopped
+2021-08-23 09:34:14 pid:51050 Workerman[index.php] start in DEBUG mode
+2021-08-23 09:35:20 pid:51050 Workerman[index.php] stopping ...
+2021-08-23 09:35:20 pid:51050 Workerman[index.php] has been stopped
+2021-08-23 09:35:21 pid:51654 Workerman[index.php] start in DEBUG mode
