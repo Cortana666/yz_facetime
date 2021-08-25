@@ -19,7 +19,7 @@ class Base {
      *
      * @author yangjian
      * @date   2021-07-08
-     * @return void
+     * @return string
      */
     public static function getEolKey() {
         return "eol@2021#kw";
@@ -30,7 +30,7 @@ class Base {
      *
      * @author yangjian
      * @date   2021-07-08
-     * @return void
+     * @return string
      */
     public static function getEolSalt() {
         return 'eol@2021#kw$salt';
@@ -42,22 +42,22 @@ class Base {
      * @author yangjian
      * @date   2021-07-08
      * @param [type] $data
-     * @return void
+     * @return string
      */
-    public static function encrypt($data) {
-        return openssl_encrypt($data, 'aes-256-cfb', self::getEolKey(), 0, self::getEolSalt());
+    public static function encrypt($data = '') {
+        return openssl_encrypt($data, 'aes-256-cfb', static::getEolKey(), 0, static::getEolSalt());
     }
 
     /**
      * 数据解密
      *
      * @author yangjian
-     * @date   2021-07-08
+     * @date   2021-08-25
      * @param [type] $data
-     * @return void
+     * @return string
      */
-    public static function decrypt($data) {
-        return openssl_decrypt($data, 'aes-256-cfb', self::getEolKey(), 0, self::getEolSalt());
+    public static function decrypt($data = '') {
+        return openssl_decrypt($data, 'aes-256-cfb', static::getEolKey(), 0, static::getEolSalt());
     }
 
     /**
@@ -65,15 +65,15 @@ class Base {
      *
      * @author yangjian
      * @date   2021-07-08
-     * @param string $func
+     * @param string $code
      * @param string $message
      * @param string $url
      * @param array $data
-     * @return void
+     * @return string
      */
-    public static function error($func = '', $message = '', $url = '', $data = []) {
+    public static function error($code = '', $message = '', $url = '', $data = []) {
         $return['status'] = 2;
-        $return['func'] = $func;
+        $return['code'] = $code;
         $return['message'] = $message;
         $return['data'] = $data;
 
@@ -85,15 +85,15 @@ class Base {
      *
      * @author yangjian
      * @date   2021-07-08
-     * @param string $func
+     * @param string $code
      * @param string $message
      * @param string $url
      * @param array $data
-     * @return void
+     * @return string
      */
-    public static function success($func = '', $message = '', $url = '', $data = []) {
+    public static function success($code = '', $message = '', $url = '', $data = []) {
         $return['status'] = 1;
-        $return['func'] = $func;
+        $return['code'] = $code;
         $return['message'] = $message;
         $return['data'] = $data;
 
@@ -105,15 +105,15 @@ class Base {
      *
      * @author yangjian
      * @date   2021-07-08
-     * @param string $func
+     * @param string $code
      * @param string $message
      * @param string $url
      * @param array $data
-     * @return void
+     * @return string
      */
     public static function heart() {
         $return['status'] = 1;
-        $return['func'] = 'heart';
+        $return['code'] = 'heart';
         $return['message'] = '';
         $return['data'] = '';
 
