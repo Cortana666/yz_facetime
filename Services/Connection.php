@@ -24,7 +24,7 @@ class Connection {
      * @date   2021-08-25
      * @return void
      */
-    public static function openConnect(&$ws_worker, $db, &$connection, $data) {
+    public static function openConnect(&$connection, &$ws_worker, $data, $db) {
         // 验证token
         $token = unserialize(Base::decrypt($data['kaowu_token']));
         if (time() - $token['time'] > 86400) {
@@ -76,6 +76,18 @@ class Connection {
                         'connection' => '',
                         'status'=>1,
                         'step'=>1,
+                        'quota'=>1,
+                        'start_time'=>'',
+                        'end_time'=>'',
+                        'times'=>[],
+                        'info'=>[
+                            'name'=>'',
+                            'card_id'=>'',
+                            'mobile'=>'',
+                            'college'=>'',
+                            'special'=>'',
+                            'direction'=>''
+                        ]
                     ];
                 }
                 if (in_array($member['type'], [1,2,4])) {
@@ -125,13 +137,18 @@ class Connection {
      * @param [type] $connection
      * @return void
      */
-    public static function ready($ws_worker, $connection) {
+    public static function ready($connection, &$ws_worker) {
         // 执行当前状态下应执行的任务
         if ($connection->type == 3) {
             if ($ws_worker->room[$connection->room_id][$connection->user_id]['setp'] == 3) {
-                // 直接进入面试
-                Service::startFace($connection->user_id);
+                Service::resumeFace($connection, $ws_worker);
+                Service::double();
+            } else {
+                Service::wait();
             }
+        }
+        if (in_array($connection->type, [1,2,4])) {
+            Service::studentList($connection, $ws_worker);
         }
     }
 
@@ -142,10 +159,15 @@ class Connection {
      * @date   2021-08-25
      * @return void
      */
-    public static function closeConnect(&$ws_worker, $connection) {
-        if (!empty($connection->user_id)) {
-            $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
-            $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
+    public static function closeConnect($connection, &$ws_worker) {
+        $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
+        $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
+        if ($connection->type == 3) {
+            Service::studentList($connection, $ws_worker);
+            if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
+                $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] = time();
+                $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];
+            }
         }
     }
 }

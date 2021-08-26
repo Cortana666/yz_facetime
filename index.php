@@ -72,8 +72,8 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
-        $connection->send(Connection::openConnect($ws_worker, $db, $connection, $data));
-        // Connection::ready($ws_worker, $connection);
+        $connection->send(Connection::openConnect($connection, $ws_worker, $data, $db));
+        // Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {
         
     } elseif ($data['code'] == 'close') {
@@ -94,7 +94,7 @@ $ws_worker->onMessage = function ($connection, $data) {
 
 $ws_worker->onClose = function ($connection) {
     global $ws_worker;
-    Connection::closeConnect($ws_worker, $connection);
+    Connection::closeConnect($connection, $ws_worker);
 };
 
 Worker::runAll();

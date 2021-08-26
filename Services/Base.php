@@ -18,7 +18,7 @@ class Base {
      * 获取加密key
      *
      * @author yangjian
-     * @date   2021-07-08
+     * @date   2021-08-26
      * @return string
      */
     public static function getEolKey() {
@@ -40,8 +40,8 @@ class Base {
      * 数据加密
      *
      * @author yangjian
-     * @date   2021-07-08
-     * @param [type] $data
+     * @date   2021-08-26
+     * @param string $data
      * @return string
      */
     public static function encrypt($data = '') {
@@ -52,8 +52,8 @@ class Base {
      * 数据解密
      *
      * @author yangjian
-     * @date   2021-08-25
-     * @param [type] $data
+     * @date   2021-08-26
+     * @param string $data
      * @return string
      */
     public static function decrypt($data = '') {
@@ -61,17 +61,16 @@ class Base {
     }
 
     /**
-     * 返回成功信息
+     * 格式化发送信息信息
      *
      * @author yangjian
-     * @date   2021-07-08
+     * @date   2021-08-26
      * @param string $code
      * @param string $message
-     * @param string $url
      * @param array $data
      * @return string
      */
-    public static function success($code = '', $message = '', $url = '', $data = []) {
+    public static function success($code = '', $message = '', $data = []) {
         $return['code'] = $code;
         $return['message'] = $message;
         $return['data'] = $data;

@@ -2,6 +2,9 @@
 
 namespace Services;
 
+use Services\Base;
+use Services\Service;
+
 /**
  * 教师类
  *
@@ -21,8 +24,8 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function invite() {
-
+    public static function invite($connection, $ws_worker, $data) {
+        $ws_worker->room[$connection->room_id][$data['user_id']]['connection']->send(Base::success('invite'));
     }
 
     /**
@@ -32,8 +35,8 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function showInfo() {
-
+    public static function showInfo($connection, $ws_worker, $data) {
+        $connection->send($ws_worker->room[$connection->room_id][$data['user_id']]['info']);
     }
 
     /**
@@ -43,8 +46,21 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function hangUp() {
+    public static function hangUp($connection, &$ws_worker) {
+        // 通知考生结束面试
+        foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
+            if ($value['type'] == 3 && $value['step'] == 3) {
+                $ws_worker->room[$connection->room_id][$key]['step'] == 4;
+                $value['connection']->send(Base::success('hang_up'));
+                if ($ws_worker->room[$connection->room_id]['double']['connection']
+                || $ws_worker->room[$connection->room_id]['double']['status'] == 2) {
+                    $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
+                }
+            }
+        }
 
+        // 给所有老师发送学生列表
+        Service::studentList($connection, $ws_worker);
     }
 
     /**
@@ -54,8 +70,10 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function endFace() {
-
+    public static function endFace($connection, &$ws_worker) {
+        foreach ($ws_worker->room[$connection->room_id] as $value) {
+            $value['connection']->send(Base::success('end_face', '考场结束面试'));
+        }
     }
 
 
@@ -67,130 +85,7 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function extend() {
-
+    public static function extend($connection, &$ws_worker, $data) {
+        $ws_worker->room[$connection->room_id][$data['user_id']]['quota'] += 1;
     }
-
-
-    // /**
-    //  * 发送学生列表
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function sendList(&$ws_worker, $connection, $data, $self = false) {
-    //     foreach ($ws_worker->room[$connection->room_id]['members'] as $key => $value) {
-    //         if ($value['type'] == 2) {
-    //             $list_info[] = $value;
-    //         }
-    //     }
-
-    //     foreach ($ws_worker->room[$connection->room_id]['members'] as $key => $value) {
-    //         if ($value['type'] == 1) {
-    //             if (self) {
-    //                 if ($connection->user_id == $key) {
-    //                     $value['connection']->send(Base::success('list', '学生列表', $list_info));
-    //                     break;
-    //                 }
-    //             } else {
-    //                 $value['connection']->send(Base::success('list', '学生列表', $list_info));
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * 发送面试邀请
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function sendInvite(&$ws_worker, $connection, $data) {
-    //     Student::sendInvite($ws_worker, $connection, $data);
-    // }
-
-    // /**
-    //  * 发送断线等待
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function sendWait(&$ws_worker, $connection, $data) {
-    //     Student::sendInvite($ws_worker, $connection, $data);
-    // }
-
-    // /**
-    //  * 发送学生信息
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function sendInfo(&$ws_worker, $connection, $data) {
-    //     $connection->send(Base::success('info', '学生信息', $ws_worker->room[$connection->room_id]['members'][$data['user_id']]));
-    // }
-
-    // /**
-    //  * 结束面试
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function endFace($ws_worker, $connection, $data) {
-    //     $ws_worker->room[$connection->room_id]['members'][$data['user_id']]['status'] = 4;
-
-    //     Student::sendWait($ws_worker, $connection, $data);
-
-    //     static::sendList($ws_worker, $connection, $data);
-    // }
-
-    // /**
-    //  * 面试时间超时
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-23
-    //  * @return void
-    //  */
-    // public static function sendTimeOut(&$ws_worker, $connection, $data) {
-    //     foreach ($ws_worker->room[$connection->room_id]['members'] as $key => $value) {
-    //         if ($value['type'] == 1) {
-    //             $value['connection']->send(Base::success('time_out', '面试时间超时'));
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * 延长考试时间
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-26
-    //  * @return void
-    //  */
-    // public static function extendTime() {
-    //     foreach ($ws_worker->room[$connection->room_id]['members'] as $key => $value) {
-    //         if ($value['type'] == 1) {
-    //             $value['connection']->send(Base::success('extend_time', '延长面试时间'));
-    //         }
-    //     }
-
-    //     $end_time = $ws_worker->room[$connection->room_id]['members']["end_time"];
-    //     $ws_worker->room[$connection->room_id]['members']["end_time"] = date('Y-m-d H:i:s', strtotime('+1 hours', strtotime($end_time)));
-    // }
-
-    // /**
-    //  * 结束考试
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-07-26
-    //  * @return void
-    //  */
-    // public static function endExam() {
-    //     foreach ($ws_worker->room[$connection->room_id]['members'] as $key => $value) {
-    //         $value['connection']->send(Base::success('end_exam', '考场面试结束'));
-    //     }
-    // }
 }
