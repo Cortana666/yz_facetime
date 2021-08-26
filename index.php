@@ -22,7 +22,6 @@ Use Services\Double;
 // var_dump(Base::encrypt(serialize(['user_id'=>943, 'time'=>time()])));
 // var_dump(11111);die;
 
-
 $ws_worker = new Worker("websocket://0.0.0.0:" . Config::$wsPort);
 $ws_worker->count = Config::$wsCount;
 $ws_worker->room = array();
@@ -63,6 +62,14 @@ $ws_worker->onMessage = function ($connection, $data) {
     var_dump($data);
     $data = json_decode($data, true);
 
+    $user_object = [
+        1=>'Teacher',
+        2=>'Teacher',
+        3=>'Student',
+        4=>'Controller',
+        5=>'Double'
+    ];
+
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
         $connection->send(Connection::openConnect($ws_worker, $db, $connection, $data));
@@ -72,39 +79,15 @@ $ws_worker->onMessage = function ($connection, $data) {
     } elseif ($data['code'] == 'close') {
         $connection->close(Base::success('close', '用户主动断开连接'));
     } else {
-        switch ($connection->type) {
-            case '1':
-            case '2':
-                // 方法检测
-                if (!function_exists('')) {
-                    $connection->send(Base::success('code_error', '未找到相应操作'));
-                }
-                Teacher::{$data['code']}();
-                break;
-            case '3':
-                // 方法检测
-                if (!function_exists('')) {
-                    $connection->send(Base::success('code_error', '未找到相应操作'));
-                }
-                Student::{$data['code']}();
-                break;
-            case '4':
-                // 方法检测
-                if (!function_exists('')) {
-                    $connection->send(Base::success('code_error', '未找到相应操作'));
-                }
-                Controller::{$data['code']}();
-                break;
-            case '5':
-                // 方法检测
-                if (!function_exists('')) {
-                    $connection->send(Base::success('code_error', '未找到相应操作'));
-                }
-                Double::{$data['code']}();
-                break;
-            default:
-                $connection->send(Base::success('type_error', '身份错误'));
-                break;
+        if (in_array($connection->type, [1,2,3,4,5])) {
+            // 方法检测
+            if (!method_exists($user_object[$connection->type], $data['code'])) {
+                $connection->send(Base::success('code_error', '未找到相应操作'));
+            } else {
+                $user_object[$connection->type]::$data['code']();
+            }
+        } else {
+            $connection->send(Base::success('type_error', '身份错误'));
         }
     }
 };
