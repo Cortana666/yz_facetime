@@ -25,6 +25,8 @@ class Student {
         $ws_worker[$connection->room_id][$connection->user_id]['step'] = 3;
         $ws_worker[$connection->room_id][$connection->user_id]['start_time'] = time();
         Service::double();
+        Service::studentList($connection, $ws_worker);
+        Service::showInfo($connection, $ws_worker, ['user_id'=>$connection->user_id]);
     }
 
     /**
@@ -37,7 +39,7 @@ class Student {
     public static function shelve($connection, &$ws_worker) {
         $ws_worker[$connection->room_id][$connection->user_id]['step'] = 2;
         foreach ($ws_worker[$connection->room_id] as $value) {
-            if (in_array($value['type'], [1,2,4])) {
+            if (in_array($value['type'], [1,2])) {
                 $value['coonection']->send(Base::success('shelve'));
             }
         }
@@ -62,5 +64,6 @@ class Student {
 
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
+        Service::showInfo($connection, $ws_worker, ['user_id'=>'']);
     }
 }

@@ -36,7 +36,7 @@ class Service {
 
         // 给所有老师发送学生列表
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
-            if (in_array($value['type'], [1,2,4])) {
+            if (in_array($value['type'], [1,2])) {
                 $value['connection']->send(Base::success('student_list', '学生列表', $aStudent));
             }
         }
@@ -51,6 +51,22 @@ class Service {
      */
     public static function wait() {
 
+    }
+
+    /**
+     * 发送学生信息
+     *
+     * @author yangjian
+     * @date   2021-08-26
+     * @return void
+     */
+    public static function showInfo($connection, $ws_worker, $data) {
+        if (!empty($data['user_id'])) {
+            $connection->send($ws_worker->room[$connection->room_id][$data['user_id']]['info']);
+        } else {
+            $connection->send([]);
+        }
+        
     }
 
     /**
@@ -84,6 +100,6 @@ class Service {
      * @return void
      */
     public static function overTime() {
-
+        
     }
 }

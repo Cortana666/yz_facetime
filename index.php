@@ -10,7 +10,6 @@ Use Services\Connection;
 Use Services\Teacher;
 Use Services\Student;
 Use Services\Controller;
-Use Services\Double;
 
 // var_dump(Base::encrypt(serialize(['user_id'=>943, 'time'=>time()])));
 // var_dump(11111);die;
@@ -59,8 +58,7 @@ $ws_worker->onMessage = function ($connection, $data) {
         1=>'Teacher',
         2=>'Teacher',
         3=>'Student',
-        4=>'Controller',
-        5=>'Double'
+        4=>'Controller'
     ];
 
     if ($data['code'] == 'token') {

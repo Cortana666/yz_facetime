@@ -36,7 +36,7 @@ class Teacher {
      * @return void
      */
     public static function showInfo($connection, $ws_worker, $data) {
-        $connection->send($ws_worker->room[$connection->room_id][$data['user_id']]['info']);
+        Service::showInfo($connection, $ws_worker, $data);
     }
 
     /**
@@ -61,6 +61,7 @@ class Teacher {
 
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
+        Service::showInfo($connection, $ws_worker, ['user_id'=>'']);
     }
 
     /**
@@ -75,8 +76,6 @@ class Teacher {
             $value['connection']->send(Base::success('end_face', '考场结束面试'));
         }
     }
-
-
 
     /**
      * 教师延长时间

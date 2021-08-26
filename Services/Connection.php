@@ -95,6 +95,9 @@ class Connection {
                         'type' => $member['type'],
                         'connection' => '',
                         'status'=>1,
+                        'info'=>[
+                            'name'=>''
+                        ]
                     ];
                 }
             }
@@ -139,6 +142,9 @@ class Connection {
      */
     public static function ready($connection, &$ws_worker) {
         // 执行当前状态下应执行的任务
+        if (in_array($connection->type, [1,2])) {
+            Service::studentList($connection, $ws_worker);
+        }
         if ($connection->type == 3) {
             if ($ws_worker->room[$connection->room_id][$connection->user_id]['setp'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
@@ -147,8 +153,9 @@ class Connection {
                 Service::wait();
             }
         }
-        if (in_array($connection->type, [1,2,4])) {
-            Service::studentList($connection, $ws_worker);
+        if (in_array($connection->type, [4])) {
+            Service::teacherList($connection, $ws_worker);
+            Service::showInfo($connection, $ws_worker);
         }
     }
 
@@ -162,11 +169,16 @@ class Connection {
     public static function closeConnect($connection, &$ws_worker) {
         $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
         $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
+        
+        if (in_array($connection->type, [1,2])) {
+            Service::teacherList($connection, $ws_worker);
+        }
         if ($connection->type == 3) {
             Service::studentList($connection, $ws_worker);
             if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
                 $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] = time();
-                $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];
+                $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];     
+                Service::showInfo($connection, $ws_worker);
             }
         }
     }
