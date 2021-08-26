@@ -1,6 +1,13 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/services/config.php';
+require_once __DIR__ . '/services/base.php';
+require_once __DIR__ . '/services/Connection.php';
+require_once __DIR__ . '/services/teacher.php';
+require_once __DIR__ . '/services/student.php';
+require_once __DIR__ . '/services/controller.php';
+require_once __DIR__ . '/services/double.php';
 
 use Workerman\Worker;
 use Workerman\Lib\Timer;
@@ -10,23 +17,21 @@ Use Services\Connection;
 Use Services\Teacher;
 Use Services\Student;
 Use Services\Controller;
-Use Services\Service;
+Use Services\Double;
 
-// require_once __DIR__ . '/service/config.php';
-// require_once __DIR__ . '/service/base.php';
-// require_once __DIR__ . '/service/Connection.php';
-// require_once __DIR__ . '/service/teacher.php';
-// require_once __DIR__ . '/service/student.php';
-// require_once __DIR__ . '/service/controller.php';
+// var_dump(Base::encrypt(serialize(['user_id'=>943, 'time'=>time()])));
+// var_dump(11111);die;
+
 
 $ws_worker = new Worker("websocket://0.0.0.0:" . Config::$wsPort);
 $ws_worker->count = Config::$wsCount;
 $ws_worker->room = array();
 
 $ws_worker->onConnect = function ($connection) {
+    $connection->lastMessageTime = time();
     // 30秒内未发送token断开连接
     $connection->auth_timer_id = Timer::add(15, function()use($connection){
-        $connection->close(Base::error('no_token', '未接受到登录信息'));
+        $connection->close(Base::success('no_token', '未接受到登录信息'));
     }, null, false);
 };
 
@@ -39,9 +44,9 @@ $ws_worker->onWorkerStart = function ($ws_worker) {
     Timer::add(Config::$heartTime, function()use($ws_worker){
         $time_now = time();
         foreach($ws_worker->connections as $connection) {
-            $connection->send(Base::heart());
+            $connection->send(Base::success('heart'));
             if ($time_now - $connection->lastMessageTime > Config::$heartOutTime) {
-                $connection->close(Base::error('no_heart', '未检测到心跳'));
+                $connection->close(Base::success('no_heart', '未检测到心跳'));
             }
         }
     });
@@ -55,35 +60,57 @@ $ws_worker->onMessage = function ($connection, $data) {
     $connection->lastMessageTime = time();
 
     // 解析json
-    $data = json_decode($data, true);
     var_dump($data);
+    $data = json_decode($data, true);
 
-    if ($data['func'] == 'token') {
-        Connection::openConnect($ws_worker, $db, $connection, $data);
-        Connection::ready($ws_worker, $connection);
-    } elseif ($data['func'] == 'heart') {
-        # code...
-    } elseif ($data['func'] == 'close') {
-        # code...
+    if ($data['code'] == 'token') {
+        Timer::del($connection->auth_timer_id);
+        $connection->send(Connection::openConnect($ws_worker, $db, $connection, $data));
+        // Connection::ready($ws_worker, $connection);
+    } elseif ($data['code'] == 'heart') {
+        
+    } elseif ($data['code'] == 'close') {
+        $connection->close(Base::success('close', '用户主动断开连接'));
     } else {
-    //     switch ($connection->type) {
-    //         case '1':
-    //             Teacher::$data['func']();
-    //             break;
-    //         case '2':
-    //             Student::$data['func']();
-    //             break;
-    //         case '3':
-    //             Controller::$data['func']();
-    //             break;
-    //         default:
-    //             # code...
-    //             break;
-    //     }
+        switch ($connection->type) {
+            case '1':
+            case '2':
+                // 方法检测
+                if (!function_exists('')) {
+                    $connection->send(Base::success('code_error', '未找到相应操作'));
+                }
+                Teacher::{$data['code']}();
+                break;
+            case '3':
+                // 方法检测
+                if (!function_exists('')) {
+                    $connection->send(Base::success('code_error', '未找到相应操作'));
+                }
+                Student::{$data['code']}();
+                break;
+            case '4':
+                // 方法检测
+                if (!function_exists('')) {
+                    $connection->send(Base::success('code_error', '未找到相应操作'));
+                }
+                Controller::{$data['code']}();
+                break;
+            case '5':
+                // 方法检测
+                if (!function_exists('')) {
+                    $connection->send(Base::success('code_error', '未找到相应操作'));
+                }
+                Double::{$data['code']}();
+                break;
+            default:
+                $connection->send(Base::success('type_error', '身份错误'));
+                break;
+        }
     }
 };
 
 $ws_worker->onClose = function ($connection) {
+    global $ws_worker;
     Connection::closeConnect($ws_worker, $connection);
 };
 

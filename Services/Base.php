@@ -61,26 +61,6 @@ class Base {
     }
 
     /**
-     * 返回错误信息
-     *
-     * @author yangjian
-     * @date   2021-07-08
-     * @param string $code
-     * @param string $message
-     * @param string $url
-     * @param array $data
-     * @return string
-     */
-    public static function error($code = '', $message = '', $url = '', $data = []) {
-        $return['status'] = 2;
-        $return['code'] = $code;
-        $return['message'] = $message;
-        $return['data'] = $data;
-
-        return json_encode($return);
-    }
-
-    /**
      * 返回成功信息
      *
      * @author yangjian
@@ -92,30 +72,9 @@ class Base {
      * @return string
      */
     public static function success($code = '', $message = '', $url = '', $data = []) {
-        $return['status'] = 1;
         $return['code'] = $code;
         $return['message'] = $message;
         $return['data'] = $data;
-
-        return json_encode($return);
-    }
-
-    /**
-     * 返回成功信息
-     *
-     * @author yangjian
-     * @date   2021-07-08
-     * @param string $code
-     * @param string $message
-     * @param string $url
-     * @param array $data
-     * @return string
-     */
-    public static function heart() {
-        $return['status'] = 1;
-        $return['code'] = 'heart';
-        $return['message'] = '';
-        $return['data'] = '';
 
         return json_encode($return);
     }

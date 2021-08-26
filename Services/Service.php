@@ -103,6 +103,17 @@ class Service {
     }
 
     /**
+     * 发送关闭二机位
+     *
+     * @author yangjian
+     * @date   2021-08-25
+     * @return void
+     */
+    public static function endDouble() {
+
+    }
+
+    /**
      * 发送断开连接
      *
      * @author yangjian

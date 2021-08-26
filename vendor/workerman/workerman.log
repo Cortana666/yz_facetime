@@ -105,3 +105,354 @@ Stack trace:
 2021-08-23 09:35:21 pid:51654 Workerman[index.php] start in DEBUG mode
 2021-08-24 05:44:59 pid:51654 Workerman[index.php] stopping ...
 2021-08-24 05:44:59 pid:51654 Workerman[index.php] has been stopped
+2021-08-25 07:53:18 pid:91702 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:01:50 pid:91702 Workerman[index.php] stopping ...
+2021-08-25 08:01:50 pid:91702 Workerman[index.php] has been stopped
+2021-08-25 08:01:51 pid:96616 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:01:53 pid:96617 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(69): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #34)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(116): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:01:53 pid:96617 Worker[96617] process terminated
+2021-08-25 08:01:53 pid:96616 worker[none:96617] exit with status 64000
+2021-08-25 08:03:06 pid:96616 Workerman[index.php] stopping ...
+2021-08-25 08:03:06 pid:96616 Workerman[index.php] has been stopped
+2021-08-25 08:03:07 pid:97314 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:03:17 pid:97315 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(69): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #34)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(116): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:03:17 pid:97315 Worker[97315] process terminated
+2021-08-25 08:03:17 pid:97314 worker[none:97315] exit with status 64000
+2021-08-25 08:03:51 pid:97314 Workerman[index.php] stopping ...
+2021-08-25 08:03:51 pid:97314 Workerman[index.php] has been stopped
+2021-08-25 08:03:52 pid:97750 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:04:00 pid:97751 Worker[97751] process terminated
+2021-08-25 08:05:16 pid:97750 Workerman[index.php] stopping ...
+2021-08-25 08:05:16 pid:97750 Workerman[index.php] has been stopped
+2021-08-25 08:05:17 pid:98535 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:05:21 pid:98535 Workerman[index.php] stopping ...
+2021-08-25 08:05:21 pid:98535 Workerman[index.php] has been stopped
+2021-08-25 08:05:22 pid:98591 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:06:47 pid:98591 Workerman[index.php] stopping ...
+2021-08-25 08:06:47 pid:98591 Workerman[index.php] has been stopped
+2021-08-25 08:06:49 pid:99383 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:06:58 pid:99384 Worker[99384] process terminated
+2021-08-25 08:08:35 pid:99383 Workerman[index.php] stopping ...
+2021-08-25 08:08:35 pid:99383 Workerman[index.php] has been stopped
+2021-08-25 08:08:36 pid:554 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:08:46 pid:555 Worker[555] process terminated
+2021-08-25 08:09:45 pid:554 Workerman[index.php] stopping ...
+2021-08-25 08:09:45 pid:554 Workerman[index.php] has been stopped
+2021-08-25 08:09:45 pid:1315 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:09:52 pid:1316 Worker[1316] process terminated
+2021-08-25 08:10:18 pid:1315 Workerman[index.php] stopping ...
+2021-08-25 08:10:18 pid:1315 Workerman[index.php] has been stopped
+2021-08-25 08:10:19 pid:1662 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:10:25 pid:1667 Worker[1667] process terminated
+2021-08-25 08:16:42 pid:1662 Workerman[index.php] stopping ...
+2021-08-25 08:16:42 pid:1662 Workerman[index.php] has been stopped
+2021-08-25 08:16:43 pid:5226 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:16:51 pid:5227 Worker[5227] process terminated
+2021-08-25 08:18:06 pid:5226 Workerman[index.php] stopping ...
+2021-08-25 08:18:06 pid:5226 Workerman[index.php] has been stopped
+2021-08-25 08:18:07 pid:6013 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:18:15 pid:6014 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:18:15 pid:6014 Worker[6014] process terminated
+2021-08-25 08:18:15 pid:6013 worker[none:6014] exit with status 64000
+2021-08-25 08:18:43 pid:6013 Workerman[index.php] stopping ...
+2021-08-25 08:18:43 pid:6013 Workerman[index.php] has been stopped
+2021-08-25 08:18:44 pid:6360 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:18:48 pid:6361 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:18:48 pid:6361 Worker[6361] process terminated
+2021-08-25 08:18:48 pid:6360 worker[none:6361] exit with status 64000
+2021-08-25 08:19:10 pid:6360 Workerman[index.php] stopping ...
+2021-08-25 08:19:10 pid:6360 Workerman[index.php] has been stopped
+2021-08-25 08:19:11 pid:6610 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:19:18 pid:6613 PDOException: SQL:SELECT student_id,AES_decrypt(ks_name,'eol@2021#kw'),AES_decrypt(card_id,'eol@2021#kw'),AES_decrypt(mobile,'eol@2021#kw'),bk_college,bk_special FROM `face_student` WHERE student_id in (8,9) SQLSTATE[42S22]: Column not found: 1054 Unknown column 'bk_college' in 'field list' in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php:1770
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php(1828): Workerman\MySQL\Connection->execute('SELECT student_...', Array)
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/services/Connection.php(56): Workerman\MySQL\Connection->query()
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(67): Services\Connection::openConnect(Object(Workerman\Worker), Object(Workerman\MySQL\Connection), Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#10 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#11 {main}
+2021-08-25 08:19:18 pid:6613 Worker[6613] process terminated
+2021-08-25 08:19:18 pid:6610 worker[none:6613] exit with status 64000
+2021-08-25 08:19:56 pid:6610 Workerman[index.php] stopping ...
+2021-08-25 08:19:56 pid:6610 Workerman[index.php] has been stopped
+2021-08-25 08:19:57 pid:7033 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:20:05 pid:7034 Worker[7034] process terminated
+2021-08-25 08:21:12 pid:7033 Workerman[index.php] stopping ...
+2021-08-25 08:21:12 pid:7033 Workerman[index.php] has been stopped
+2021-08-25 08:21:12 pid:7733 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:21:21 pid:7734 Worker[7734] process terminated
+2021-08-25 08:23:00 pid:7733 Workerman[index.php] stopping ...
+2021-08-25 08:23:00 pid:7733 Workerman[index.php] has been stopped
+2021-08-25 08:23:01 pid:8725 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:23:11 pid:8726 Worker[8726] process terminated
+2021-08-25 08:23:42 pid:8725 Workerman[index.php] stopping ...
+2021-08-25 08:23:42 pid:8725 Workerman[index.php] has been stopped
+2021-08-25 08:23:43 pid:9119 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:23:46 pid:9123 PDOException: SQL:SELECT student_id,AES_decrypt(ks_name,'eol@2021#kw'),AES_decrypt(card_id,'eol@2021#kw'),AES_decrypt(mobile,'eol@2021#kw'),bk_college,bk_special FROM `face_student` WHERE student_id in (8,9) SQLSTATE[42S22]: Column not found: 1054 Unknown column 'bk_college' in 'field list' in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php:1770
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php(1828): Workerman\MySQL\Connection->execute('SELECT student_...', Array)
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/services/Connection.php(56): Workerman\MySQL\Connection->query()
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(67): Services\Connection::openConnect(Object(Workerman\Worker), Object(Workerman\MySQL\Connection), Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#10 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#11 {main}
+2021-08-25 08:23:46 pid:9123 Worker[9123] process terminated
+2021-08-25 08:23:46 pid:9119 worker[none:9123] exit with status 64000
+2021-08-25 08:25:02 pid:9119 Workerman[index.php] stopping ...
+2021-08-25 08:25:02 pid:9119 Workerman[index.php] has been stopped
+2021-08-25 08:25:03 pid:9866 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:25:05 pid:9867 PDOException: SQL:SELECT user_id,AES_decrypt(card_id,'eol@2021#kw') FROM `ims_user` WHERE card_id in () SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1 in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php:1770
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php(1828): Workerman\MySQL\Connection->execute('SELECT user_id,...', Array)
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/services/Connection.php(59): Workerman\MySQL\Connection->query()
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(67): Services\Connection::openConnect(Object(Workerman\Worker), Object(Workerman\MySQL\Connection), Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#10 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#11 {main}
+2021-08-25 08:25:05 pid:9867 Worker[9867] process terminated
+2021-08-25 08:25:05 pid:9866 worker[none:9867] exit with status 64000
+2021-08-25 08:25:52 pid:9866 Workerman[index.php] stopping ...
+2021-08-25 08:25:52 pid:9866 Workerman[index.php] has been stopped
+2021-08-25 08:25:53 pid:10326 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:26:05 pid:10327 Worker[10327] process terminated
+2021-08-25 08:26:42 pid:10326 Workerman[index.php] stopping ...
+2021-08-25 08:26:42 pid:10326 Workerman[index.php] has been stopped
+2021-08-25 08:26:43 pid:10818 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:26:47 pid:10818 Workerman[index.php] stopping ...
+2021-08-25 08:26:47 pid:10818 Workerman[index.php] has been stopped
+2021-08-25 08:26:48 pid:10869 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:26:55 pid:10870 PDOException: SQL:SELECT user_id,AES_DECRYPT(card_id,'eol@2021#kw') as card_id FROM `ims_user` WHERE card_id in (111222199911112222,15212719870714091X) SQLSTATE[42S22]: Column not found: 1054 Unknown column '15212719870714091X' in 'where clause' in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php:1770
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/mysql/src/Connection.php(1828): Workerman\MySQL\Connection->execute('SELECT user_id,...', Array)
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/services/Connection.php(59): Workerman\MySQL\Connection->query()
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(67): Services\Connection::openConnect(Object(Workerman\Worker), Object(Workerman\MySQL\Connection), Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#10 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#11 {main}
+2021-08-25 08:26:55 pid:10870 Worker[10870] process terminated
+2021-08-25 08:26:55 pid:10869 worker[none:10870] exit with status 64000
+2021-08-25 08:28:56 pid:10869 Workerman[index.php] stopping ...
+2021-08-25 08:28:56 pid:10869 Workerman[index.php] has been stopped
+2021-08-25 08:28:57 pid:12060 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:29:03 pid:12065 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:29:03 pid:12065 Worker[12065] process terminated
+2021-08-25 08:29:03 pid:12060 worker[none:12065] exit with status 64000
+2021-08-25 08:29:49 pid:12060 Workerman[index.php] stopping ...
+2021-08-25 08:29:49 pid:12060 Workerman[index.php] has been stopped
+2021-08-25 08:29:50 pid:12552 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:29:59 pid:12553 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:29:59 pid:12553 Worker[12553] process terminated
+2021-08-25 08:29:59 pid:12552 worker[none:12553] exit with status 64000
+2021-08-25 08:30:38 pid:12552 Workerman[index.php] stopping ...
+2021-08-25 08:30:38 pid:12552 Workerman[index.php] has been stopped
+2021-08-25 08:30:39 pid:13003 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:30:47 pid:13004 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:30:47 pid:13004 Worker[13004] process terminated
+2021-08-25 08:30:47 pid:13003 worker[none:13004] exit with status 64000
+2021-08-25 08:31:17 pid:13003 Workerman[index.php] stopping ...
+2021-08-25 08:31:17 pid:13003 Workerman[index.php] has been stopped
+2021-08-25 08:31:18 pid:13368 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:31:25 pid:13369 Worker[13369] process terminated
+2021-08-25 08:31:43 pid:13368 Workerman[index.php] stopping ...
+2021-08-25 08:31:43 pid:13368 Workerman[index.php] has been stopped
+2021-08-25 08:31:44 pid:13621 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:31:51 pid:13622 Worker[13622] process terminated
+2021-08-25 08:32:02 pid:13621 Workerman[index.php] stopping ...
+2021-08-25 08:32:02 pid:13621 Workerman[index.php] has been stopped
+2021-08-25 08:32:03 pid:13805 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:32:11 pid:13806 Worker[13806] process terminated
+2021-08-25 08:33:06 pid:13805 Workerman[index.php] stopping ...
+2021-08-25 08:33:06 pid:13805 Workerman[index.php] has been stopped
+2021-08-25 08:33:06 pid:14397 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:33:13 pid:14399 Exception: You can't send(NULL) to client, you need to convert it to a string.  in /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Protocols/Websocket.php:236
+Stack trace:
+#0 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(321): Workerman\Protocols\Websocket::encode(NULL, Object(Workerman\Connection\TcpConnection))
+#1 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(68): Workerman\Connection\TcpConnection->send(NULL)
+#2 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Connection/TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), Array)
+#3 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Events/Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #33)
+#4 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(2430): Workerman\Events\Select->loop()
+#5 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1554): Workerman\Worker->run()
+#6 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1384): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#7 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(1358): Workerman\Worker::forkWorkersForLinux()
+#8 /Volumes/Box/Developement/Workerman/yz_facetime/vendor/workerman/workerman/Worker.php(542): Workerman\Worker::forkWorkers()
+#9 /Volumes/Box/Developement/Workerman/yz_facetime/index.php(115): Workerman\Worker::runAll()
+#10 {main}
+2021-08-25 08:33:13 pid:14399 Worker[14399] process terminated
+2021-08-25 08:33:13 pid:14397 worker[none:14399] exit with status 64000
+2021-08-25 08:33:50 pid:14397 Workerman[index.php] stopping ...
+2021-08-25 08:33:50 pid:14397 Workerman[index.php] has been stopped
+2021-08-25 08:33:51 pid:14830 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:35:57 pid:14830 Workerman[index.php] stopping ...
+2021-08-25 08:35:57 pid:14830 Workerman[index.php] has been stopped
+2021-08-25 08:35:57 pid:16009 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:38:02 pid:16009 Workerman[index.php] stopping ...
+2021-08-25 08:38:02 pid:16009 Workerman[index.php] has been stopped
+2021-08-25 08:38:03 pid:17186 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:39:12 pid:17186 Workerman[index.php] stopping ...
+2021-08-25 08:39:12 pid:17186 Workerman[index.php] has been stopped
+2021-08-25 08:39:12 pid:17832 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:51:14 pid:17832 Workerman[index.php] stopping ...
+2021-08-25 08:51:14 pid:17832 Workerman[index.php] has been stopped
+2021-08-25 08:51:15 pid:24706 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:52:16 pid:24706 Workerman[index.php] stopping ...
+2021-08-25 08:52:16 pid:24706 Workerman[index.php] has been stopped
+2021-08-25 08:52:17 pid:25293 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:55:20 pid:25293 Workerman[index.php] stopping ...
+2021-08-25 08:55:20 pid:25293 Workerman[index.php] has been stopped
+2021-08-25 08:55:21 pid:27020 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:56:55 pid:27020 Workerman[index.php] stopping ...
+2021-08-25 08:56:55 pid:27020 Workerman[index.php] has been stopped
+2021-08-25 08:56:56 pid:27916 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:57:07 pid:27917 Worker[27917] process terminated
+2021-08-25 08:57:35 pid:27916 Workerman[index.php] stopping ...
+2021-08-25 08:57:35 pid:27916 Workerman[index.php] has been stopped
+2021-08-25 08:57:36 pid:28304 Workerman[index.php] start in DEBUG mode
+2021-08-25 08:57:46 pid:28305 Worker[28305] process terminated
+2021-08-25 08:59:23 pid:28304 Workerman[index.php] stopping ...
+2021-08-25 08:59:23 pid:28304 Workerman[index.php] has been stopped
+2021-08-25 09:01:16 pid:30371 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:21:39 pid:30371 Workerman[index.php] stopping ...
+2021-08-25 09:21:39 pid:30371 Workerman[index.php] has been stopped
+2021-08-25 09:22:38 pid:42527 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:24:23 pid:42527 Workerman[index.php] stopping ...
+2021-08-25 09:24:23 pid:42527 Workerman[index.php] has been stopped
+2021-08-25 09:24:23 pid:43553 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:25:03 pid:43553 Workerman[index.php] stopping ...
+2021-08-25 09:25:03 pid:43553 Workerman[index.php] has been stopped
+2021-08-25 09:25:04 pid:43940 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:25:52 pid:43940 Workerman[index.php] stopping ...
+2021-08-25 09:25:52 pid:43940 Workerman[index.php] has been stopped
+2021-08-25 09:25:53 pid:44380 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:26:40 pid:44380 Workerman[index.php] stopping ...
+2021-08-25 09:26:40 pid:44380 Workerman[index.php] has been stopped
+2021-08-25 09:26:41 pid:44845 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:27:52 pid:44845 Workerman[index.php] stopping ...
+2021-08-25 09:27:52 pid:44845 Workerman[index.php] has been stopped
+2021-08-25 09:27:53 pid:45522 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:29:06 pid:45522 Workerman[index.php] stopping ...
+2021-08-25 09:29:06 pid:45522 Workerman[index.php] has been stopped
+2021-08-25 09:29:07 pid:46233 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:29:10 pid:46234 Worker[46234] process terminated
+2021-08-25 09:30:00 pid:46233 Workerman[index.php] stopping ...
+2021-08-25 09:30:00 pid:46233 Workerman[index.php] has been stopped
+2021-08-25 09:30:01 pid:46748 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:30:51 pid:46748 Workerman[index.php] stopping ...
+2021-08-25 09:30:51 pid:46748 Workerman[index.php] has been stopped
+2021-08-25 09:30:51 pid:47222 Workerman[index.php] start in DEBUG mode
+2021-08-25 09:30:54 pid:47223 Worker[47223] process terminated
+2021-08-25 09:31:15 pid:47222 Workerman[index.php] stopping ...
+2021-08-25 09:31:15 pid:47222 Workerman[index.php] has been stopped
+2021-08-25 09:31:15 pid:47454 Workerman[index.php] start in DEBUG mode
+2021-08-25 10:11:27 pid:47454 Workerman[index.php] stopping ...
+2021-08-25 10:11:27 pid:47454 Workerman[index.php] has been stopped
+2021-08-25 10:11:43 pid:73367 Workerman[index.php] start in DEBUG mode
+2021-08-26 01:42:46 pid:73367 Workerman[index.php] stopping ...
+2021-08-26 01:42:47 pid:73367 Workerman[index.php] has been stopped
