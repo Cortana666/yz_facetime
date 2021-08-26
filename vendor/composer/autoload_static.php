@@ -12,6 +12,10 @@ class ComposerStaticInit31bb2398dedaab7d7ad21443c45d97c5
             'Workerman\\MySQL\\' => 16,
             'Workerman\\' => 10,
         ),
+        'S' => 
+        array (
+            'Services\\' => 9,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -22,6 +26,10 @@ class ComposerStaticInit31bb2398dedaab7d7ad21443c45d97c5
         'Workerman\\' => 
         array (
             0 => __DIR__ . '/..' . '/workerman/workerman',
+        ),
+        'Services\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/services',
         ),
     );
 

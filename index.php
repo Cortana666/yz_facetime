@@ -1,13 +1,6 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/services/config.php';
-require_once __DIR__ . '/services/base.php';
-require_once __DIR__ . '/services/Connection.php';
-require_once __DIR__ . '/services/teacher.php';
-require_once __DIR__ . '/services/student.php';
-require_once __DIR__ . '/services/controller.php';
-require_once __DIR__ . '/services/double.php';
 
 use Workerman\Worker;
 use Workerman\Lib\Timer;

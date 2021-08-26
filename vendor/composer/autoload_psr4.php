@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Workerman\\MySQL\\' => array($vendorDir . '/workerman/mysql/src'),
     'Workerman\\' => array($vendorDir . '/workerman/workerman'),
+    'Services\\' => array($baseDir . '/services'),
 );

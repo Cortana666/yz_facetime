@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'd52d7a8dc017773dff697946d0ba44ce41996607',
+        'reference' => 'ea1d7c303f99ec4aa869b479b99f9dad3e43f963',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'd52d7a8dc017773dff697946d0ba44ce41996607',
+            'reference' => 'ea1d7c303f99ec4aa869b479b99f9dad3e43f963',
             'dev_requirement' => false,
         ),
         'workerman/mysql' => array(

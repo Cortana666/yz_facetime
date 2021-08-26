@@ -456,3 +456,6 @@ Stack trace:
 2021-08-25 10:11:43 pid:73367 Workerman[index.php] start in DEBUG mode
 2021-08-26 01:42:46 pid:73367 Workerman[index.php] stopping ...
 2021-08-26 01:42:47 pid:73367 Workerman[index.php] has been stopped
+2021-08-26 06:58:37 pid:97039 Workerman[index.php] start in DEBUG mode
+2021-08-26 06:58:41 pid:97039 Workerman[index.php] stopping ...
+2021-08-26 06:58:41 pid:97039 Workerman[index.php] has been stopped
