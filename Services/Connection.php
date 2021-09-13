@@ -167,18 +167,20 @@ class Connection {
      * @return void
      */
     public static function closeConnect($connection, &$ws_worker) {
-        $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
-        $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
-        
-        if (in_array($connection->type, [1,2])) {
-            Service::teacherList($connection, $ws_worker);
-        }
-        if ($connection->type == 3) {
-            Service::studentList($connection, $ws_worker);
-            if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
-                $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] = time();
-                $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];     
-                Service::showInfo($connection, $ws_worker);
+        if (!empty($connection->user_id)) {
+            $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
+            $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
+            
+            if (in_array($connection->type, [1,2])) {
+                Service::teacherList($connection, $ws_worker);
+            }
+            if ($connection->type == 3) {
+                Service::studentList($connection, $ws_worker);
+                if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
+                    $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] = time();
+                    $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];     
+                    Service::showInfo($connection, $ws_worker);
+                }
             }
         }
     }

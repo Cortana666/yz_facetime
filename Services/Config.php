@@ -29,4 +29,11 @@ class Config {
      */
     public static $heartTime = 2;
     public static $heartOutTime = 30;
+
+    /**
+     * 每个人面试时间
+     *
+     * @var integer
+     */
+    public static $faceTime = 300;
 }
