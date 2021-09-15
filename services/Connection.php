@@ -68,6 +68,7 @@ class Connection {
                 $students = $db->select("student_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
                 if ($students) {
                     $users = $db->select("user_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where("card_id in ('".implode("','", array_column($students, 'card_id'))."')")->query();
+                    var_dump($users);die;
                     if ($users) {
                         $users = array_column($users, 'user_id', 'card_id');
                     }
