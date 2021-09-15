@@ -66,11 +66,11 @@ $ws_worker->onMessage = function ($connection, $data) {
         // Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
         // 方法检测
-        if (!method_exists($user_object[$connection->type], $data['code'])) {
-            $connection->send(Base::success('code_error', '未找到相应操作'));
-        } else {
+        // if (!method_exists($user_object[$connection->type], $data['code'])) {
+        //     $connection->send(Base::success('code_error', '未找到相应操作'));
+        // } else {
             $user_object[$connection->type]::$data['code']($connection, $ws_worker, $data);
-        }
+        // }
     }
 };
 
