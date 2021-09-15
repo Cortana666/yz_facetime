@@ -69,7 +69,7 @@ $ws_worker->onMessage = function ($connection, $data) {
         // if (!method_exists($user_object[$connection->type], $data['code'])) {
         //     $connection->send(Base::success('code_error', '未找到相应操作'));
         // } else {
-            $user_object[$connection->type]::{$data['code']}($connection, $ws_worker, $data);
+            call_user_func_array("{$user_object[$connection->type]}::{$data['code']}", [$connection, $ws_worker, $data]);
         // }
     }
 };
