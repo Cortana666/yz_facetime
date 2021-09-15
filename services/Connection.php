@@ -122,7 +122,7 @@ class Connection {
             $ws_worker->room[$connection->room_id]['double']['connection'] = $connection;
             $ws_worker->room[$connection->room_id]['double']['status'] = 2;
         } else {
-            var_dump($data,$ws_worker->room);die;
+            var_dump($token,$ws_worker->room[$data['room_id']]);die;
             if ($ws_worker->room[$data['room_id']][$token['user_id']]['type'] != $data['type']) {
                 $connection->close(Base::success('token_error', '身份验证失败'));
             }
