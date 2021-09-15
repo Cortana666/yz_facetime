@@ -25,7 +25,9 @@ class Teacher {
      * @return void
      */
     public static function invite($connection, $ws_worker, $data) {
-        $ws_worker->room[$connection->room_id][$data['user_id']]['connection']->send(Base::success('invite'));
+        if ($ws_worker->room[$connection->room_id][$data['user_id']]['connection']) {
+            $ws_worker->room[$connection->room_id][$data['user_id']]['connection']->send(Base::success('invite'));
+        }
     }
 
     /**
