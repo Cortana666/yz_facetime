@@ -21,7 +21,7 @@ class Service {
      * @date   2021-08-25
      * @return void
      */
-    public static function studentList($connection, &$ws_worker) {
+    public static function studentList($connection, $ws_worker) {
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if ($value['type'] == 3) {
                 $aStudent[] = [
@@ -48,7 +48,7 @@ class Service {
      * @date   2021-08-25
      * @return void
      */
-    public static function teacherList($connection, &$ws_worker) {
+    public static function teacherList($connection, $ws_worker) {
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if (in_array($value['type'], [1,2])) {
                 $aTeacher[] = [

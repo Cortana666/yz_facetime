@@ -63,7 +63,7 @@ $ws_worker->onMessage = function ($connection, $data) {
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
         Connection::openConnect($connection, $ws_worker, $data, $db);
-        Connection::ready($connection, $ws_worker);
+        // Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
         // 方法检测
         if (!method_exists($user_object[$connection->type], $data['code'])) {
