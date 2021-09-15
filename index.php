@@ -54,7 +54,6 @@ $ws_worker->onMessage = function ($connection, $data) {
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
         Connection::openConnect($connection, $ws_worker, $data, $db);
-        var_dump($ws_worker);die;
         Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
         switch ($connection->type) {
