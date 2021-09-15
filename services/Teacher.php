@@ -37,11 +37,11 @@ class Teacher {
      */
     public static function hangUp($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
-            if ($value['type'] == 3 && $value['step'] == 3) {
+            if ($value['type'] == 3 && $value['step'] == 3 && $value['coonection']) {
                 $ws_worker->room[$connection->room_id][$key]['step'] == 4;
                 $value['connection']->send(Base::success('hang_up'));
 
-                if ($ws_worker->room[$connection->room_id]['double']['status'] == 2) {
+                if ($ws_worker->room[$connection->room_id]['double']['status'] == 2 && $ws_worker->room[$connection->room_id]['double']['connection']) {
                     $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
                 }
             }

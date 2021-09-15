@@ -35,7 +35,9 @@ class Service {
         // 给所有老师发送学生列表
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if (in_array($value['type'], [1,2])) {
-                $value['connection']->send(Base::success('student_list', '学生列表', $aStudent));
+                if ($value['connection']) {
+                    $value['connection']->send(Base::success('student_list', '学生列表', $aStudent));
+                }
             }
         }
     }
@@ -60,7 +62,9 @@ class Service {
         // 给所有老师发送学生列表
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if ($value['type'] == 3) {
-                $value['connection']->send(Base::success('teacher_list', '教师列表', $aTeacher));
+                if ($value['connection']) {
+                    $value['connection']->send(Base::success('teacher_list', '教师列表', $aTeacher));
+                }
             }
         }
     }
