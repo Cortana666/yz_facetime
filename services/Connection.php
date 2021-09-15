@@ -38,7 +38,7 @@ class Connection {
         if ($data['type'] == 3) {
             $user = $db->select('user_id,token')->from('ims_user')->where('user_id= :user_id AND token = :token')->bindValues(array('user_id' => $token['user_id'], 'token'=>$data['kaowu_token']))->row();
         } else {
-            $user = $db->select('user_id,token')->from('face_teacher')->where('teacher_id= :user_id AND token = :token')->bindValues(array('user_id' => $token['user_id'], 'token'=>$data['kaowu_token']))->row();
+            $user = $db->select('teacher_id,token')->from('face_teacher')->where('teacher_id= :user_id AND token = :token')->bindValues(array('user_id' => $token['user_id'], 'token'=>$data['kaowu_token']))->row();
         }
         if (!$user) {
             $connection->close(Base::success('token_error', 'token验证失败'));
