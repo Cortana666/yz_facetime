@@ -26,7 +26,7 @@ class Connection {
      */
     public static function openConnect(&$connection, &$ws_worker, $data, $db) {
         // 验证身份
-        if (in_array($data['type'], [1,2,3,4,5])) {
+        if (!in_array($data['type'], [1,2,3,4,5])) {
             $connection->close(Base::success('token_error', '身份验证失败'));
         }
 
@@ -122,7 +122,6 @@ class Connection {
             $ws_worker->room[$connection->room_id]['double']['connection'] = $connection;
             $ws_worker->room[$connection->room_id]['double']['status'] = 2;
         } else {
-            var_dump($ws_worker->room[$data['room_id']][$token['user_id']]['type'], $data['type']);die;
             if ($ws_worker->room[$data['room_id']][$token['user_id']]['type'] != $data['type']) {
                 $connection->close(Base::success('token_error', '身份验证失败'));
             }
