@@ -29,31 +29,19 @@ class Teacher {
     }
 
     /**
-     * 教师查看学生信息
-     *
-     * @author yangjian
-     * @date   2021-08-25
-     * @return void
-     */
-    public static function showInfo($connection, $ws_worker, $data) {
-        Service::showInfo($connection, $ws_worker, $data);
-    }
-
-    /**
      * 教师挂断面试
      *
      * @author yangjian
      * @date   2021-08-25
      * @return void
      */
-    public static function hangUp($connection, &$ws_worker) {
-        // 通知考生结束面试
+    public static function hangUp($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if ($value['type'] == 3 && $value['step'] == 3) {
                 $ws_worker->room[$connection->room_id][$key]['step'] == 4;
                 $value['connection']->send(Base::success('hang_up'));
-                if ($ws_worker->room[$connection->room_id]['double']['connection']
-                || $ws_worker->room[$connection->room_id]['double']['status'] == 2) {
+
+                if ($ws_worker->room[$connection->room_id]['double']['status'] == 2) {
                     $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
                 }
             }
@@ -61,7 +49,6 @@ class Teacher {
 
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
-        Service::showInfo($connection, $ws_worker, ['user_id'=>'']);
     }
 
     /**
@@ -71,20 +58,11 @@ class Teacher {
      * @date   2021-08-25
      * @return void
      */
-    public static function endFace($connection, &$ws_worker) {
+    public static function endFace($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id] as $value) {
-            $value['connection']->send(Base::success('end_face', '考场结束面试'));
+            $value['connection']->close(Base::success('end_face', '考场结束面试'));
         }
-    }
 
-    /**
-     * 教师延长时间
-     *
-     * @author yangjian
-     * @date   2021-08-25
-     * @return void
-     */
-    public static function extend($connection, &$ws_worker, $data) {
-        $ws_worker->room[$connection->room_id][$data['user_id']]['quota'] += 1;
+        unset($ws_worker->room[$connection->room_id]);
     }
 }

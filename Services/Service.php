@@ -22,12 +22,10 @@ class Service {
      * @return void
      */
     public static function studentList($connection, $ws_worker) {
-        // 通知考生结束面试
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if ($value['type'] == 3) {
                 $aStudent[] = [
                     'user_id'=>$key,
-                    'name'=>$value['info']['name'],
                     'status'=>$value['status'],
                     'step'=>$value['step'],
                 ];
@@ -38,6 +36,31 @@ class Service {
         foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
             if (in_array($value['type'], [1,2])) {
                 $value['connection']->send(Base::success('student_list', '学生列表', $aStudent));
+            }
+        }
+    }
+
+    /**
+     * 给学生发送教师列表
+     *
+     * @author yangjian
+     * @date   2021-08-25
+     * @return void
+     */
+    public static function teacherList($connection, $ws_worker) {
+        foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
+            if (in_array($value['type'], [1,2])) {
+                $aTeacher[] = [
+                    'user_id'=>$key,
+                    'status'=>$value['status'],
+                ];
+            }
+        }
+
+        // 给所有老师发送学生列表
+        foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
+            if ($value['type'] == 3) {
+                $value['connection']->send(Base::success('teacher_list', '教师列表', $aTeacher));
             }
         }
     }
@@ -54,33 +77,6 @@ class Service {
     }
 
     /**
-     * 发送学生信息
-     *
-     * @author yangjian
-     * @date   2021-08-26
-     * @return void
-     */
-    public static function showInfo($connection, $ws_worker, $data) {
-        if (!empty($data['user_id'])) {
-            $connection->send($ws_worker->room[$connection->room_id][$data['user_id']]['info']);
-        } else {
-            $connection->send([]);
-        }
-        
-    }
-
-    /**
-     * 给学生发送二机位码
-     *
-     * @author yangjian
-     * @date   2021-08-25
-     * @return void
-     */
-    public static function double() {
-
-    }
-
-    /**
      * 学生继续面试
      *
      * @author yangjian
@@ -92,14 +88,14 @@ class Service {
         $ws_worker[$connection->room_id][$connection->user_id]['start_time'] = time();
     }
 
-    /**
-     * 给教师发送面试即将超时
-     *
-     * @author yangjian
-     * @date   2021-08-25
-     * @return void
-     */
-    public static function overTime() {
+    // /**
+    //  * 给教师发送面试即将超时
+    //  *
+    //  * @author yangjian
+    //  * @date   2021-08-25
+    //  * @return void
+    //  */
+    // public static function overTime() {
         
-    }
+    // }
 }
