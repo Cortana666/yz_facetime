@@ -150,7 +150,7 @@ class Connection {
             Service::studentList($connection, $ws_worker);
         }
         if ($connection->type == 3) {
-            if ($ws_worker->room[$connection->room_id][$connection->user_id]['setp'] == 3) {
+            if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
             } else {
                 Service::wait();
