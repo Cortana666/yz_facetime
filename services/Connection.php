@@ -77,6 +77,7 @@ class Connection {
                 // 初始化房间
                 $ws_worker->room[$data['room_id']] = array();
                 $ws_worker->room[$data['room_id']]['double'] = [
+                    'type'=>5,
                     'connection' => '',
                     'status'=>1,
                 ];
