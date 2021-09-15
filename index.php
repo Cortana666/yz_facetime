@@ -7,9 +7,8 @@ use Workerman\Lib\Timer;
 Use Services\Config;
 Use Services\Base;
 Use Services\Connection;
-// Use Services\Teacher;
-// Use Services\Student;
-// Use Services\Controller;
+Use Services\Teacher;
+Use Services\Student;
 
 $ws_worker = new Worker("websocket://127.0.0.1:" . Config::$wsPort);
 $ws_worker->count = Config::$wsCount;
@@ -52,25 +51,22 @@ $ws_worker->onMessage = function ($connection, $data) {
     $data = json_decode($data, true);
     var_dump($data);
 
-    $user_object = [
-        1=>'Teacher',
-        2=>'Teacher',
-        3=>'Student',
-        4=>'Controller',
-        5=>'Student'
-    ];
-
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
         Connection::openConnect($connection, $ws_worker, $data, $db);
-        // Connection::ready($connection, $ws_worker);
+        Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
-        // 方法检测
-        // if (!method_exists($user_object[$connection->type], $data['code'])) {
-        //     $connection->send(Base::success('code_error', '未找到相应操作'));
-        // } else {
-            call_user_func_array("Service\\{$user_object[$connection->type]}::{$data['code']}", [$connection, $ws_worker, $data]);
-        // }
+        switch ($connection->type) {
+            case '1':
+            case '2':
+            case '4':
+                Teacher::{$data['code']}($connection, $ws_worker, $data);
+                break;
+            case '3':
+            case '5':
+                Student::{$data['code']}($connection, $ws_worker, $data);
+                break;
+        }
     }
 };
 
