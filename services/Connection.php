@@ -31,6 +31,7 @@ class Connection {
         }
 
         // 验证token
+        var_dump(Base::decrypt($data['kaowu_token']));
         $token = unserialize(Base::decrypt($data['kaowu_token']));
         if (time() - $token['time'] > 86400) {
             $connection->close(Base::success('token_error', 'token验证失败'));
