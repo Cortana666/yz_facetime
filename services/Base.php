@@ -45,7 +45,7 @@ class Base {
      * @return string
      */
     public static function encrypt($data = '') {
-        return openssl_encrypt($data, 'aes-256-cfb', str_pad(static::getEolKey(), 32, "0", STR_PAD_RIGHT), 0, str_pad(static::getEolSalt(), 16, "0", STR_PAD_RIGHT));
+        return openssl_encrypt($data, 'aes-256-cbc', str_pad(static::getEolKey(), 32, "0", STR_PAD_RIGHT), 0, str_pad(static::getEolSalt(), 16, "0", STR_PAD_RIGHT));
     }
 
     /**
@@ -57,7 +57,7 @@ class Base {
      * @return string
      */
     public static function decrypt($data = '') {
-        return openssl_decrypt($data, 'aes-256-cfb', str_pad(static::getEolKey(), 32, "0", STR_PAD_RIGHT), 0, str_pad(static::getEolSalt(), 16, "0", STR_PAD_RIGHT));
+        return openssl_decrypt($data, 'aes-256-cbc', str_pad(static::getEolKey(), 32, "0", STR_PAD_RIGHT), 0, str_pad(static::getEolSalt(), 16, "0", STR_PAD_RIGHT));
     }
 
     /**
