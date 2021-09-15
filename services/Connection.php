@@ -73,7 +73,7 @@ class Connection {
                     //     $users = array_column($users, 'user_id', 'card_id');
                     // }
                 }
-                var_dump($students);die;
+                var_dump($users);die;
                 // 初始化房间
                 $ws_worker->room[$data['room_id']] = array();
                 $ws_worker->room[$data['room_id']]['double'] = [
