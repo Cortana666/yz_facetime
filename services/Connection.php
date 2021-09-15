@@ -82,7 +82,7 @@ class Connection {
                 ];
                 foreach ($members as $member) {
                     if ($member['type'] == 3) {
-                        $ws_worker->room[$data['room_id']][$users[$students[$member['member_id']]['card_id']]] = [
+                        $ws_worker->room[$data['room_id']][$users[$students[$member['member_id']]]] = [
                             'type' => $member['type'],
                             'connection' => '',
                             'status'=>1,
