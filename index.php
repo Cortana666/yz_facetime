@@ -7,9 +7,9 @@ use Workerman\Lib\Timer;
 Use Services\Config;
 Use Services\Base;
 Use Services\Connection;
-Use Services\Teacher;
-Use Services\Student;
-Use Services\Controller;
+// Use Services\Teacher;
+// Use Services\Student;
+// Use Services\Controller;
 
 $ws_worker = new Worker("websocket://127.0.0.1:" . Config::$wsPort);
 $ws_worker->count = Config::$wsCount;
@@ -69,7 +69,7 @@ $ws_worker->onMessage = function ($connection, $data) {
         // if (!method_exists($user_object[$connection->type], $data['code'])) {
         //     $connection->send(Base::success('code_error', '未找到相应操作'));
         // } else {
-            call_user_func_array("{$user_object[$connection->type]}::{$data['code']}", [$connection, $ws_worker, $data]);
+            call_user_func_array("Service\\{$user_object[$connection->type]}::{$data['code']}", [$connection, $ws_worker, $data]);
         // }
     }
 };
