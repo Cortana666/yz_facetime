@@ -107,7 +107,7 @@ class Connection {
                 // 定时器24小时后关闭连接
                 $ws_worker->close_timer_id[$data['room_id']] = Timer::add(3600, function()use($ws_worker, $data){
                     $close_flag = true;
-                    foreach ($ws_worker as $value) {
+                    foreach ($ws_worker->room[$data['room_id']] as $value) {
                         if ($value['status'] == 2) {
                             $close_flag = false;
                         }
