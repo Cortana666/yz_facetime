@@ -28,6 +28,7 @@ class Student {
         $ws_worker[$connection->room_id][$connection->user_id]['step'] = 3;
         $ws_worker[$connection->room_id][$connection->user_id]['start_time'] = time();
         Service::studentList($connection, $ws_worker);
+        Service::wait($connection, $ws_worker);
 
         // 学生面试时间检测
         // $ws_worker->face_timer_id[$connection->room_id] = Timer::add(Config::$faceTime - 30, function()use($connection){

@@ -154,7 +154,7 @@ class Connection {
             if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
             } else {
-                Service::wait();
+                Service::wait($connection, $ws_worker);
             }
         }
     }

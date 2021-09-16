@@ -76,8 +76,22 @@ class Service {
      * @date   2021-08-25
      * @return void
      */
-    public static function wait() {
-
+    public static function wait($connection, $ws_worker) {
+        $face_time = 5;
+        $wait_number = 0;
+        foreach ($ws_worker->room[$connection->room_id] as $value) {
+            if ($value['type'] == 3) {
+                if ($value['connection']) {
+                    $value['connection']->send(Base::success('wait', '学生等待信息', ['position'=>$wait_number, 'wait_time'=>$wait_number * $face_time]));
+                }
+                if ($value['step'] == 1) {
+                    $wait_number ++;
+                }
+                if ($value['step'] == 4) {
+                    $face_time = $value['count_time'] / 60;
+                }
+            }
+        }
     }
 
     /**
