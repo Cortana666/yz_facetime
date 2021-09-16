@@ -25,8 +25,8 @@ class Student {
      * @return void
      */
     public static function invite($connection, &$ws_worker, $data) {
-        $ws_worker[$connection->room_id][$connection->user_id]['step'] = 3;
-        $ws_worker[$connection->room_id][$connection->user_id]['start_time'] = time();
+        $ws_worker->room[$connection->room_id][$connection->user_id]['step'] = 3;
+        $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'] = time();
         Service::studentList($connection, $ws_worker);
         Service::wait($connection, $ws_worker);
 
@@ -45,8 +45,8 @@ class Student {
      * @return void
      */
     public static function shelve($connection, &$ws_worker, $data) {
-        $ws_worker[$connection->room_id][$connection->user_id]['step'] = 2;
-        foreach ($ws_worker[$connection->room_id] as $value) {
+        $ws_worker->room[$connection->room_id][$connection->user_id]['step'] = 2;
+        foreach ($ws_worker->room[$connection->room_id] as $value) {
             if ($value['type'] == 1 && $value['coonection']) {
                 $value['coonection']->send(Base::success('shelve'));
             }
@@ -70,7 +70,7 @@ class Student {
 
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
-        foreach ($ws_worker[$connection->room_id] as $value) {
+        foreach ($ws_worker->room[$connection->room_id] as $value) {
             if ($value['type'] == 1 && $value['coonection']) {
                 $value['coonection']->send(Base::success('hang_up'));
             }
