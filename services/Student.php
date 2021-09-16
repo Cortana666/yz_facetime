@@ -47,7 +47,7 @@ class Student {
     public static function shelve($connection, &$ws_worker, $data) {
         $ws_worker->room[$connection->room_id][$connection->user_id]['step'] = 2;
         foreach ($ws_worker->room[$connection->room_id] as $value) {
-            if ($value['type'] == 1 && $value['connection']) {
+            if (in_array($value['type'], [1,2]) && $value['connection']) {
                 $value['connection']->send(Base::success('shelve'));
             }
         }
@@ -71,7 +71,7 @@ class Student {
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
         foreach ($ws_worker->room[$connection->room_id] as $value) {
-            if ($value['type'] == 1 && $value['connection']) {
+            if (in_array($value['type'], [1,2]) && $value['connection']) {
                 $value['connection']->send(Base::success('hang_up'));
             }
         }
