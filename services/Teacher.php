@@ -62,7 +62,9 @@ class Teacher {
      */
     public static function endFace($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id] as $value) {
-            $value['connection']->close(Base::success('end_face', '考场结束面试'));
+            if ($value['connection']) {
+                $value['connection']->close(Base::success('end_face', '考场结束面试'));
+            }
         }
 
         unset($ws_worker->room[$connection->room_id]);
