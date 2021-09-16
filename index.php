@@ -56,13 +56,13 @@ $ws_worker->onMessage = function ($connection, $data) {
 
     // 解析json
     $data = json_decode($data, true);
-    var_dump($data);
 
     if ($data['code'] == 'token') {
         Timer::del($connection->auth_timer_id);
         Connection::openConnect($connection, $ws_worker, $data, $db);
         Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
+        var_dump($data);
         if (!method_exists($user_object[$connection->type], $data['code'])) {
             $connection->send(Base::success('code_error', '未找到相应操作'));
         } else {
