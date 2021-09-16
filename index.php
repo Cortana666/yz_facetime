@@ -7,8 +7,14 @@ use Workerman\Lib\Timer;
 Use Services\Config;
 Use Services\Base;
 Use Services\Connection;
-Use Services\Teacher;
-Use Services\Student;
+
+$user_object = [
+    1=>'Teacher',
+    2=>'Teacher',
+    3=>'Student',
+    4=>'Teacher',
+    5=>'Student'
+];
 
 $ws_worker = new Worker("websocket://127.0.0.1:" . Config::$wsPort);
 $ws_worker->count = Config::$wsCount;
@@ -43,6 +49,7 @@ $ws_worker->onWorkerStart = function ($ws_worker) {
 $ws_worker->onMessage = function ($connection, $data) {
     global $ws_worker;
     global $db;
+    global $user_object;
 
     // 更新心跳时间
     $connection->lastMessageTime = time();
@@ -56,17 +63,27 @@ $ws_worker->onMessage = function ($connection, $data) {
         Connection::openConnect($connection, $ws_worker, $data, $db);
         Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
-        switch ($connection->type) {
-            case '1':
-            case '2':
-            case '4':
-                Teacher::{$data['code']}($connection, $ws_worker, $data);
-                break;
-            case '3':
-            case '5':
-                Student::{$data['code']}($connection, $ws_worker, $data);
-                break;
+        if (!method_exists("Services\\".$user_object[$connection->type], $data['code'])) {
+            $connection->send(Base::success('code_error', '未找到相应操作'));
+        } else {
+            "Services\\".$user_object[$connection->type]::{$data['code']}($connection, $ws_worker, $data);
         }
+
+        // switch ($connection->type) {
+        //     case '1':
+        //     case '2':
+        //     case '4':
+        //         // 方法检测
+        //         if (!method_exists('Teacher', $data['code'])) {
+        //             $connection->send(Base::success('code_error', '未找到相应操作'));
+        //         }
+        //         Teacher::{$data['code']}($connection, $ws_worker, $data);
+        //         break;
+        //     case '3':
+        //     case '5':
+        //         Student::{$data['code']}($connection, $ws_worker, $data);
+        //         break;
+        // }
     }
 };
 
