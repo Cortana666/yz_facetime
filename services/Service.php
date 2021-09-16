@@ -106,14 +106,21 @@ class Service {
         $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'] = time();
     }
 
-    // /**
-    //  * 给教师发送面试即将超时
-    //  *
-    //  * @author yangjian
-    //  * @date   2021-08-25
-    //  * @return void
-    //  */
-    // public static function overTime() {
-        
-    // }
+    /**
+     * 网络状态
+     *
+     * @author yangjian
+     * @date   2021-09-16
+     * @param [type] $connection
+     * @param [type] $ws_worker
+     * @param [type] $data
+     * @return void
+     */
+    public static function netQuality($connection, &$ws_worker, $data) {
+        foreach ($ws_worker->room[$connection->room_id] as $value) {
+            if ($value['connection']) {
+                $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->id, 'quality'=>$data['quality']]));
+            }
+        }
+    } 
 }

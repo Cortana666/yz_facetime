@@ -7,6 +7,7 @@ use Workerman\Lib\Timer;
 Use Services\Config;
 Use Services\Base;
 Use Services\Connection;
+Use Services\Service;
 
 $user_object = [
     1=>'Services\Teacher',
@@ -61,7 +62,9 @@ $ws_worker->onMessage = function ($connection, $data) {
         Timer::del($connection->auth_timer_id);
         Connection::openConnect($connection, $ws_worker, $data, $db);
         Connection::ready($connection, $ws_worker);
-    } elseif ($data['code'] == 'heart') {} else {
+    } elseif ($data['code'] == 'heart') {} elseif ($data['code'] == 'quality') {
+        Service::netQuality($connection, $ws_worker, $data);
+    } else {
         var_dump($connection->type);
         var_dump($data);
         if (!method_exists($user_object[$connection->type], $data['code'])) {
