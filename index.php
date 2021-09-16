@@ -9,11 +9,11 @@ Use Services\Base;
 Use Services\Connection;
 
 $user_object = [
-    1=>'Teacher',
-    2=>'Teacher',
-    3=>'Student',
-    4=>'Teacher',
-    5=>'Student'
+    1=>'Services\Teacher',
+    2=>'Services\Teacher',
+    3=>'Services\Student',
+    4=>'Services\Teacher',
+    5=>'Services\Student'
 ];
 
 $ws_worker = new Worker("websocket://127.0.0.1:" . Config::$wsPort);
@@ -63,10 +63,10 @@ $ws_worker->onMessage = function ($connection, $data) {
         Connection::openConnect($connection, $ws_worker, $data, $db);
         Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
-        if (!method_exists("Services\\".$user_object[$connection->type], $data['code'])) {
+        if (!method_exists($user_object[$connection->type], $data['code'])) {
             $connection->send(Base::success('code_error', '未找到相应操作'));
         } else {
-            "Services\\".$user_object[$connection->type]::{$data['code']}($connection, $ws_worker, $data);
+            $user_object[$connection->type]::{$data['code']}($connection, $ws_worker, $data);
         }
 
         // switch ($connection->type) {
