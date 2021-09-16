@@ -155,9 +155,7 @@ class Connection {
      */
     public static function ready($connection, &$ws_worker) {
         // 执行当前状态下应执行的任务
-        if (in_array($connection->type, [1,2])) {
-            Service::studentList($connection, $ws_worker);
-        }
+        Service::studentList($connection, $ws_worker);
         if ($connection->type == 3) {
             if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
