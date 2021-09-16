@@ -63,17 +63,18 @@ class Student {
      */
     public static function hangUp($connection, &$ws_worker, $data) {
         // 通知考生结束面试
-        $ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 4;
+        var_dump($ws_worker->room[$connection->room_id]['double']);
+        $ws_worker->room[$connection->room_id][$connection->user_id]['step'] = 4;
         if ($ws_worker->room[$connection->room_id]['double']['status'] == 2) {
             $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
         }
 
         // 给所有老师发送学生列表
         Service::studentList($connection, $ws_worker);
-        foreach ($ws_worker->room[$connection->room_id] as $value) {
-            if (in_array($value['type'], [1,2]) && $value['connection']) {
-                $value['connection']->send(Base::success('hang_up'));
-            }
-        }
+        // foreach ($ws_worker->room[$connection->room_id] as $value) {
+        //     if (in_array($value['type'], [1,2]) && $value['connection']) {
+        //         $value['connection']->send(Base::success('hang_up'));
+        //     }
+        // }
     }
 }

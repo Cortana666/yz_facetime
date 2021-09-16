@@ -122,6 +122,7 @@ class Connection {
                     }
                     if ($close_flag) {
                         Timer::del($data['room_id']);
+                        unset($ws_worker->room[$data['room_id']]);
                     }
                 }, null, false);
             }
