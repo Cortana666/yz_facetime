@@ -62,28 +62,13 @@ $ws_worker->onMessage = function ($connection, $data) {
         Connection::openConnect($connection, $ws_worker, $data, $db);
         Connection::ready($connection, $ws_worker);
     } elseif ($data['code'] == 'heart') {} else {
+        var_dump($connection->type);
         var_dump($data);
         if (!method_exists($user_object[$connection->type], $data['code'])) {
             $connection->send(Base::success('code_error', '未找到相应操作'));
         } else {
             $user_object[$connection->type]::{$data['code']}($connection, $ws_worker, $data);
         }
-
-        // switch ($connection->type) {
-        //     case '1':
-        //     case '2':
-        //     case '4':
-        //         // 方法检测
-        //         if (!method_exists('Teacher', $data['code'])) {
-        //             $connection->send(Base::success('code_error', '未找到相应操作'));
-        //         }
-        //         Teacher::{$data['code']}($connection, $ws_worker, $data);
-        //         break;
-        //     case '3':
-        //     case '5':
-        //         Student::{$data['code']}($connection, $ws_worker, $data);
-        //         break;
-        // }
     }
 };
 
