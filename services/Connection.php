@@ -28,13 +28,13 @@ class Connection {
     public static function openConnect(&$connection, &$ws_worker, $data, $db) {
         // 验证身份
         if (!in_array($data['type'], [1,2,3,4,5])) {
-            $connection->close(Base::success('token_error', '身份验证失败'));
+            $connection->close(Base::success('token_error', '身份验证失败(0)'));
         }
 
         // 验证token
         $token = unserialize(Base::decrypt($data['kaowu_token']));
         if (time() - $token['time'] > 86400) {
-            $connection->close(Base::success('token_error', 'token验证失败'));
+            $connection->close(Base::success('token_error', 'token验证失败(0)'));
         }
         if ($data['type'] == 3) {
             $user = $db->select('user_id,token')->from('ims_user')->where('user_id= :user_id AND token = :token')->bindValues(array('user_id' => $token['user_id'], 'token'=>$data['kaowu_token']))->row();
@@ -42,7 +42,7 @@ class Connection {
             $user = $db->select('teacher_id,token')->from('face_teacher')->where('teacher_id= :user_id AND token = :token')->bindValues(array('user_id' => $token['user_id'], 'token'=>$data['kaowu_token']))->row();
         }
         if (!$user) {
-            $connection->close(Base::success('token_error', 'token验证失败'));
+            $connection->close(Base::success('token_error', 'token验证失败(1)'));
         }
 
         // 初始化房间
@@ -132,7 +132,7 @@ class Connection {
             $ws_worker->room[$connection->room_id]['double']['status'] = 2;
         } else {
             if ($ws_worker->room[$data['room_id']][$token['user_id']]['type'] != $data['type']) {
-                $connection->close(Base::success('token_error', '身份验证失败'));
+                $connection->close(Base::success('token_error', '身份验证失败(1)'));
             }
 
             $connection->user_id = $token['user_id'];
