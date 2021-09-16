@@ -103,7 +103,7 @@ class Service {
      */
     public static function resumeFace($connection, &$ws_worker) {
         $connection->send(Base::success('resume_face'));
-        $ws_worker[$connection->room_id][$connection->user_id]['start_time'] = time();
+        $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'] = time();
     }
 
     // /**
