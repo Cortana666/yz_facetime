@@ -82,7 +82,7 @@ class Service {
         foreach ($ws_worker->room[$connection->room_id] as $value) {
             if ($value['type'] == 3) {
                 if ($value['connection']) {
-                    $value['connection']->send(Base::success('wait', '学生等待信息', ['position'=>$wait_number, 'wait_time'=>$wait_number * $face_time]));
+                    $value['connection']->send(Base::success('wait', '学生等待信息', ['position'=>$wait_number, 'wait_time'=>$wait_number * $face_time, 'step'=>$value['step']]));
                 }
                 if ($value['step'] == 1) {
                     $wait_number ++;
