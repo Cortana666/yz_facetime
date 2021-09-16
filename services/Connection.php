@@ -45,6 +45,14 @@ class Connection {
             $connection->close(Base::success('token_error', 'token验证失败(1)'));
         }
 
+        $room = $db->select('status')->from('face_room')->where('room_id= :room_id')->bindValues(array('room_id' => $data['room_id']))->row();
+        if (!$room) {
+            $connection->close(Base::success('room_error', '面试房间错误'));
+        }
+        if ($room['status'] != 2) {
+            $connection->close(Base::success('room_error', '该考场未在考试'));
+        }
+
         // 初始化房间
         if (empty($ws_worker->room[$data['room_id']])) {
             if ($data['type'] == 5) {
