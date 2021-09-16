@@ -4,6 +4,7 @@ namespace Services;
 
 use Services\Base;
 use Services\Service;
+use Workerman\Lib\Timer;
 
 /**
  * 初始化连接类
@@ -104,10 +105,17 @@ class Connection {
                 }
 
                 // 定时器24小时后关闭连接
-                // $ws_worker->close_timer_id = Timer::add(, function()use($connection){
-                //     $connection->send(Base::success('time_out', '即将超过一名考生的面试时间'));
-                //     Timer::del($connection->face_timer_id);
-                // }, null, false);
+                $ws_worker->close_timer_id[$data['room_id']] = Timer::add(3600, function()use($ws_worker, $data){
+                    $close_flag = true;
+                    foreach ($ws_worker as $value) {
+                        if ($value['status'] == 2) {
+                            $close_flag = false;
+                        }
+                    }
+                    if ($close_flag) {
+                        Timer::del($data['room_id']);
+                    }
+                }, null, false);
             }
         }
 

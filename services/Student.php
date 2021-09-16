@@ -31,10 +31,10 @@ class Student {
         Service::wait($connection, $ws_worker);
 
         // 学生面试时间检测
-        // $ws_worker->face_timer_id[$connection->room_id] = Timer::add(Config::$faceTime - 30, function()use($connection){
-        //     $connection->send(Base::success('time_out', '即将超过一名考生的面试时间'));
-        //     Timer::del($ws_worker->face_timer_id[$connection->room_id]);
-        // }, null, false);
+        $ws_worker->face_timer_id[$connection->room_id] = Timer::add(Config::$faceTime - 30, function()use($connection, $ws_worker){
+            $connection->send(Base::success('time_out', '即将超过一名考生的面试时间'));
+            Timer::del($ws_worker->face_timer_id[$connection->room_id]);
+        }, null, false);
     }
 
     /**
