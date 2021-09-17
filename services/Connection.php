@@ -45,7 +45,7 @@ class Connection {
             $connection->close(Base::success('token_error', 'token验证失败(1)'));
         }
 
-        $room = $db->select('status')->from('face_room')->where('room_id= :room_id')->bindValues(array('room_id' => $data['room_id']))->row();
+        $room = $db->select('scene_id,status')->from('face_room')->where('room_id= :room_id')->bindValues(array('room_id' => $data['room_id']))->row();
         if (!$room) {
             $connection->close(Base::success('room_error', '面试房间错误'));
         }
@@ -157,7 +157,7 @@ class Connection {
                 $user = $db->select("AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where('user_id= :user_id')->bindValues(array('user_id' => $token['user_id']))->row();
                 $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $user['card_id']))->query();
                 $members = $db->select('member_id')->from('face_room_member')->where('room_id= :room_id AND member_id in ('.implode(',', array_column($students, 'student_id')).')')->bindValues(array('room_id' => $data['room_id']))->row();
-                
+
                 if ($ws_worker->room[$data['room_id']]['student'][$members['member_id']]['type'] != $data['type']) {
                     $connection->close(Base::success('token_error', '身份验证失败(1)'));
                 }
