@@ -25,8 +25,8 @@ class Teacher {
      * @return void
      */
     public static function invite($connection, $ws_worker, $data) {
-        if ($ws_worker->room[$connection->room_id][$data['user_id']]['connection']) {
-            $ws_worker->room[$connection->room_id][$data['user_id']]['connection']->send(Base::success('invite'));
+        if ($ws_worker->room[$connection->room_id]['student'][$data['user_id']]['connection']) {
+            $ws_worker->room[$connection->room_id]['student'][$data['user_id']]['connection']->send(Base::success('invite'));
         }
     }
 
@@ -38,9 +38,9 @@ class Teacher {
      * @return void
      */
     public static function hangUp($connection, &$ws_worker, $data) {
-        foreach ($ws_worker->room[$connection->room_id] as $key => $value) {
-            if ($value['type'] == 3 && $value['step'] == 3 && $value['connection']) {
-                $ws_worker->room[$connection->room_id][$key]['step'] = 4;
+        foreach ($ws_worker->room[$connection->room_id]['student'] as $key => $value) {
+            if ($value['step'] == 3 && $value['connection']) {
+                $ws_worker->room[$connection->room_id]['student'][$key]['step'] = 4;
                 $value['connection']->send(Base::success('hang_up'));
 
                 if ($ws_worker->room[$connection->room_id]['double']['status'] == 2 && $ws_worker->room[$connection->room_id]['double']['connection']) {
@@ -61,7 +61,12 @@ class Teacher {
      * @return void
      */
     public static function endFace($connection, &$ws_worker, $data) {
-        foreach ($ws_worker->room[$connection->room_id] as $value) {
+        foreach ($ws_worker->room[$connection->room_id]['student'] as $value) {
+            if ($value['connection']) {
+                $value['connection']->close(Base::success('end_face', '考场结束面试'));
+            }
+        }
+        foreach ($ws_worker->room[$connection->room_id]['teacher'] as $value) {
             if ($value['connection']) {
                 $value['connection']->close(Base::success('end_face', '考场结束面试'));
             }

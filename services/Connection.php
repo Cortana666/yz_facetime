@@ -74,14 +74,14 @@ class Connection {
                         $controller_ids[] = $member['member_id'];
                     }
                 }
-                $students = $db->select("student_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
-                if ($students) {
-                    $users = $db->select("user_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."') in ('".implode("','", array_column($students, 'card_id'))."')")->query();
-                    if ($users) {
-                        $users = array_column($users, 'user_id', 'card_id');
-                    }
-                }
-                $students = array_column($students, 'card_id', 'student_id');
+                // $students = $db->select("student_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('face_student')->where('student_id in ('.implode(',', $student_ids).')')->query();
+                // if ($students) {
+                //     $users = $db->select("user_id,AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."') in ('".implode("','", array_column($students, 'card_id'))."')")->query();
+                //     if ($users) {
+                //         $users = array_column($users, 'user_id', 'card_id');
+                //     }
+                // }
+                // $students = array_column($students, 'card_id', 'student_id');
                 
                 // 初始化房间
                 $ws_worker->room[$data['room_id']] = array();
@@ -92,7 +92,7 @@ class Connection {
                 ];
                 foreach ($members as $member) {
                     if ($member['type'] == 3) {
-                        $ws_worker->room[$data['room_id']][$users[$students[$member['member_id']]]] = [
+                        $ws_worker->room[$data['room_id']]['student'][$member['member_id']] = [
                             'type' => $member['type'],
                             'connection' => '',
                             'status'=>1,
@@ -104,7 +104,7 @@ class Connection {
                             'times'=>[],
                         ];
                     } else {
-                        $ws_worker->room[$data['room_id']][$member['member_id']] = [
+                        $ws_worker->room[$data['room_id']]['teacher'][$member['member_id']] = [
                             'type' => $member['type'],
                             'connection' => '',
                             'status'=>1,
@@ -112,29 +112,36 @@ class Connection {
                     }
                 }
 
-                // 定时器24小时后关闭连接
-                $ws_worker->close_timer_id[$data['room_id']] = Timer::add(3600, function()use($ws_worker, $data){
-                    $close_flag = true;
-                    foreach ($ws_worker->room[$data['room_id']] as $value) {
-                        if ($value['status'] == 2) {
-                            $close_flag = false;
-                        }
-                    }
-                    if ($close_flag) {
-                        Timer::del($data['room_id']);
-                        unset($ws_worker->room[$data['room_id']]);
-                    }
-                }, null, false);
+                // // 定时器24小时后关闭连接
+                // $ws_worker->close_timer_id[$data['room_id']] = Timer::add(3600, function()use($ws_worker, $data){
+                //     $close_flag = true;
+                //     foreach ($ws_worker->room[$data['room_id']] as $value) {
+                //         if ($value['status'] == 2) {
+                //             $close_flag = false;
+                //         }
+                //     }
+                //     if ($close_flag) {
+                //         Timer::del($data['room_id']);
+                //         unset($ws_worker->room[$data['room_id']]);
+                //     }
+                // }, null, false);
             }
         }
 
         // 初始化连接
         if ($data['type'] == 5) {
-            if ($ws_worker->room[$data['room_id']][$token['user_id']]['step'] != 3) {
+            $user = $db->select("AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where('user_id= :user_id')->bindValues(array('user_id' => $token['user_id']))->row();
+            $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $user['card_id']))->query();
+            $members = $db->select('member_id')->from('face_room_member')->where('room_id= :room_id AND member_id in ('.implode(',', array_column($students, 'student_id')).')')->bindValues(array('room_id' => $data['room_id']))->row();
+
+            if ($ws_worker->room[$data['room_id']]['student'][$members['member_id']]['step'] != 3) {
                 $connection->close(Base::success('room_error', '请在开始面试后扫描二维码'));
             }
 
-            $connection->user_id = $token['user_id'];
+            $connection->member_id = $members['member_id'];
+            $connection->school_id = $token['school_id'];
+            $connection->school_year = $token['school_year'];
+            $connection->scene_id = $room['scene_id'];
             $connection->room_id = $data['room_id'];
             $connection->type = $data['type'];
             $ws_worker->room[$connection->room_id]['double']['connection'] = $connection;
@@ -144,11 +151,11 @@ class Connection {
                 $connection->close(Base::success('token_error', '身份验证失败(1)'));
             }
 
-            $connection->user_id = $token['user_id'];
+            $connection->member_id = $token['user_id'];
             $connection->room_id = $data['room_id'];
             $connection->type = $data['type'];
-            $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = $connection;
-            $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 2;
+            $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['connection'] = $connection;
+            $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['status'] = 2;
         }
 
         $connection->send(Base::success('token_success', '连接成功'));
@@ -162,15 +169,27 @@ class Connection {
      * @param [type] $connection
      * @return void
      */
-    public static function ready($connection, &$ws_worker) {
+    public static function ready($connection, &$ws_worker, $db) {
         // 执行当前状态下应执行的任务
         Service::studentList($connection, $ws_worker);
         if ($connection->type == 3) {
-            if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
+            if ($ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
             } else {
                 Service::wait($connection, $ws_worker);
             }
+
+            // 记录操作
+            $db->insert('face_log_room_active')->cols(array(
+                'school_id'=>$connection->school_id,
+                'year'=>$connection->school_year,
+                'scene_id'=>$connection->scene_id,
+                'room_id'=>$connection->room_id,
+                'member_id'=>$connection->member_id,
+                'type'=>$connection->type,
+                'active'=>1,
+                'active_time'=>date('Y-m-d H:i:s')
+            ))->query();
         }
     }
 
@@ -181,26 +200,39 @@ class Connection {
      * @date   2021-08-25
      * @return void
      */
-    public static function closeConnect($connection, &$ws_worker) {
-        if (!empty($connection->user_id)) {
+    public static function closeConnect($connection, &$ws_worker, $db) {
+        if (!empty($connection->member_id)) {
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';
                 $ws_worker->room[$connection->room_id]['double']['status'] = 1;
             } else {
-                $ws_worker->room[$connection->room_id][$connection->user_id]['connection'] = '';
-                $ws_worker->room[$connection->room_id][$connection->user_id]['status'] = 1;
-
                 if (in_array($connection->type, [1,2])) {
+                    $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['connection'] = '';
+                    $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['status'] = 1;
                     Service::teacherList($connection, $ws_worker);
                 }
                 if ($connection->type == 3) {
+                    $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['connection'] = '';
+                    $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['status'] = 1;
                     Service::studentList($connection, $ws_worker);
                     
-                    if ($ws_worker->room[$connection->room_id][$connection->user_id]['step'] == 3) {
-                        $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] = time();
-                        $ws_worker->room[$connection->room_id][$connection->user_id]['count_time'] += $ws_worker->room[$connection->room_id][$connection->user_id]['end_time'] - $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'];
-                        $ws_worker->room[$connection->room_id][$connection->user_id]['times'][] = $ws_worker->room[$connection->room_id][$connection->user_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->user_id]['end_time'];
+                    if ($ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] == 3) {
+                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['end_time'] = time();
+                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['count_time'] += $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['end_time'] - $ws_worker->room[$connection->room_id][$connection->member_id]['start_time'];
+                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['times'][] = $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->member_id]['end_time'];
                     }
+
+                    // 记录操作
+                    $db->insert('face_log_room_active')->cols(array(
+                        'school_id'=>$connection->school_id,
+                        'year'=>$connection->school_year,
+                        'scene_id'=>$connection->scene_id,
+                        'room_id'=>$connection->room_id,
+                        'member_id'=>$connection->member_id,
+                        'type'=>$connection->type,
+                        'active'=>1,
+                        'active_time'=>date('Y-m-d H:i:s')
+                    ))->query();
                 }
             }
         }
