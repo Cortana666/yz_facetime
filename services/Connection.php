@@ -147,15 +147,26 @@ class Connection {
             $ws_worker->room[$connection->room_id]['double']['connection'] = $connection;
             $ws_worker->room[$connection->room_id]['double']['status'] = 2;
         } else {
-            if ($ws_worker->room[$data['room_id']][$token['user_id']]['type'] != $data['type']) {
-                $connection->close(Base::success('token_error', '身份验证失败(1)'));
-            }
-
-            $connection->member_id = $token['user_id'];
+            $connection->member_id = $members['member_id'];
+            $connection->school_id = $token['school_id'];
+            $connection->school_year = $token['school_year'];
+            $connection->scene_id = $room['scene_id'];
             $connection->room_id = $data['room_id'];
             $connection->type = $data['type'];
-            $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['connection'] = $connection;
-            $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['status'] = 2;
+
+            if ($data['type'] == 3) {
+                if ($ws_worker->room[$data['room_id']]['student'][$token['user_id']]['type'] != $data['type']) {
+                    $connection->close(Base::success('token_error', '身份验证失败(1)'));
+                }
+                $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['connection'] = $connection;
+                $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['status'] = 2;
+            } else {
+                if ($ws_worker->room[$data['room_id']]['teacher'][$token['user_id']]['type'] != $data['type']) {
+                    $connection->close(Base::success('token_error', '身份验证失败(1)'));
+                }
+                $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['connection'] = $connection;
+                $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['status'] = 2;
+            }
         }
 
         $connection->send(Base::success('token_success', '连接成功'));
