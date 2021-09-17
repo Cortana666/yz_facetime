@@ -156,7 +156,6 @@ class Connection {
             if ($data['type'] == 3) {
                 $user = $db->select("AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where('user_id= :user_id')->bindValues(array('user_id' => $token['user_id']))->row();
                 $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $user['card_id']))->query();
-                var_dump($user,$students);die;
                 $members = $db->select('member_id')->from('face_room_member')->where('room_id= :room_id AND member_id in ('.implode(',', array_column($students, 'student_id')).')')->bindValues(array('room_id' => $data['room_id']))->row();
 
                 if ($ws_worker->room[$data['room_id']]['student'][$members['member_id']]['type'] != $data['type']) {
