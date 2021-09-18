@@ -25,8 +25,8 @@ class Student {
      * @return void
      */
     public static function invite($connection, &$ws_worker, $data) {
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 3;
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'] = time();
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['step'] = 3;
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['start_time'] = time();
         Service::studentList($connection, $ws_worker);
         Service::wait($connection, $ws_worker);
 
@@ -45,7 +45,7 @@ class Student {
      * @return void
      */
     public static function shelve($connection, &$ws_worker, $data) {
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 2;
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['step'] = 2;
         foreach ($ws_worker->room[$connection->room_id]['member'] as $value) {
             if (in_array($value['type'], [1,2]) && $value['connection']) {
                 $value['connection']->send(Base::success('shelve'));
@@ -63,7 +63,7 @@ class Student {
      */
     public static function hangUp($connection, &$ws_worker, $data) {
         // 通知考生结束面试
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 4;
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['step'] = 4;
         if ($ws_worker->room[$connection->room_id]['double']['status'] == 2) {
             $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
         }

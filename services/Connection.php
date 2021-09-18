@@ -120,7 +120,7 @@ class Connection {
             }
         }
 
-        $connection->id = $members['id'];
+        $connection->exam_id = $members['id'];
         $connection->member_id = $members['member_id'];
         $connection->school_id = $token['school_id'];
         $connection->school_year = $token['school_year'];
@@ -128,8 +128,8 @@ class Connection {
         $connection->room_id = $data['room_id'];
         $connection->type = $data['type'];
 
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['connection'] = $connection;
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['status'] = 2;
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['connection'] = $connection;
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['status'] = 2;
 
         $connection->send(Base::success('token_success', '连接成功'));
     }
@@ -147,7 +147,7 @@ class Connection {
         Service::studentList($connection, $ws_worker);
 
         if ($connection->type == 3) {
-            if ($ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] == 3) {
+            if ($ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['step'] == 3) {
                 Service::resumeFace($connection, $ws_worker);
             } else {
                 Service::wait($connection, $ws_worker);
@@ -175,24 +175,24 @@ class Connection {
      * @return void
      */
     public static function closeConnect($connection, &$ws_worker, $db) {
-        if (!empty($connection->id)) {
+        if (!empty($connection->exam_id)) {
             var_dump($connection);
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';
                 $ws_worker->room[$connection->room_id]['double']['status'] = 1;
             } else {
-                $ws_worker->room[$connection->room_id]['member'][$connection->id]['connection'] = '';
-                $ws_worker->room[$connection->room_id]['member'][$connection->id]['status'] = 1;
+                $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['connection'] = '';
+                $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['status'] = 1;
                 // if (in_array($connection->type, [1,2])) {
                 //     Service::teacherList($connection, $ws_worker);
                 // }
                 if ($connection->type == 3) {
                     Service::studentList($connection, $ws_worker);
                     
-                    if ($ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] == 3) {
-                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'] = time();
-                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['count_time'] += $ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'] - $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'];
-                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['times'][] = $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'].'-'.$ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'];
+                    if ($ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['step'] == 3) {
+                        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['end_time'] = time();
+                        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['count_time'] += $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['end_time'] - $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['start_time'];
+                        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['times'][] = $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['start_time'].'-'.$ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['end_time'];
                     }
                 }
             }

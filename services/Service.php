@@ -101,7 +101,7 @@ class Service {
      */
     public static function resumeFace($connection, &$ws_worker) {
         $connection->send(Base::success('resume_face'));
-        $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'] = time();
+        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['start_time'] = time();
     }
 
     /**
@@ -117,7 +117,7 @@ class Service {
     public static function netQuality($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id]['member'] as $value) {
             if ($value['connection']) {
-                $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
+                $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->exam_id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
             }
         }
     } 
