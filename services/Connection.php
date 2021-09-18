@@ -39,7 +39,7 @@ class Connection {
 
         // 验证考场
         $room = $db->select('scene_id,status')->from('face_room')->where('room_id= :room_id')->bindValues(array('room_id' => $data['room_id']))->row();
-        if (2 != $room['status'] ?? '') {
+        if (2 != ($room['status'] ?? '')) {
             $connection->close(Base::success('room_error', '该考场未在考试'));
         }
 
