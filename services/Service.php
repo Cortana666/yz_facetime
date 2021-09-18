@@ -120,5 +120,8 @@ class Service {
                 $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->exam_id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
             }
         }
+        if ($ws_worker->room[$connection->room_id]['double']['connection']) {
+            $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->exam_id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
+        }
     } 
 }

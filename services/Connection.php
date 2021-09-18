@@ -56,9 +56,9 @@ class Connection {
                 $ws_worker->room[$data['room_id']] = array();
                 $ws_worker->room[$data['room_id']]['member'] = array();
                 $ws_worker->room[$data['room_id']]['double'] = [
-                    'connection' => '',
-                    'member_id' => '',
-                    'type' => 5,
+                    'connection'=>'',
+                    'member_id'=>'',
+                    'type'=>5,
                     'status'=>1,
                     'quota'=>1,
                     'step'=>1,
