@@ -176,7 +176,7 @@ class Connection {
      * @return void
      */
     public static function closeConnect($connection, &$ws_worker, $db) {
-        var_dump($connection);die;
+        var_dump($connection);
         if (!empty($connection->id)) {
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';

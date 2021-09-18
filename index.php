@@ -65,8 +65,8 @@ $ws_worker->onMessage = function ($connection, $data) {
     } elseif ($data['code'] == 'heart') {} elseif ($data['code'] == 'quality') {
         Service::netQuality($connection, $ws_worker, $data);
     } else {
-        var_dump($connection->type);
-        var_dump($data);
+        // var_dump($connection->type);
+        // var_dump($data);
         if (!method_exists($user_object[$connection->type], $data['code'])) {
             $connection->send(Base::success('code_error', '未找到相应操作'));
         } else {
