@@ -128,8 +128,13 @@ class Connection {
         $connection->room_id = $data['room_id'];
         $connection->type = $data['type'];
 
-        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['connection'] = $connection;
-        $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['status'] = 2;
+        if ($data['type'] == 5) {
+            $ws_worker->room[$connection->room_id]['double']['connection'] = $connection;
+            $ws_worker->room[$connection->room_id]['double']['status'] = 2;
+        } else {
+            $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['connection'] = $connection;
+            $ws_worker->room[$connection->room_id]['member'][$connection->exam_id]['status'] = 2;
+        }
 
         $connection->send(Base::success('token_success', '连接成功'));
     }
@@ -176,9 +181,6 @@ class Connection {
      */
     public static function closeConnect($connection, &$ws_worker, $db) {
         if (!empty($connection->exam_id)) {
-            var_dump(222222222);
-            var_dump($connection->exam_id);
-            var_dump(111111111);
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';
                 $ws_worker->room[$connection->room_id]['double']['status'] = 1;
