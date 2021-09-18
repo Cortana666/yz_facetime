@@ -117,7 +117,7 @@ class Service {
     public static function netQuality($connection, &$ws_worker, $data) {
         foreach ($ws_worker->room[$connection->room_id]['member'] as $value) {
             if ($value['connection']) {
-                $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->member_id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
+                $value['connection']->send(Base::success('quality', '网络信息', ['user_id'=>$connection->id, 'quality'=>$data['quality'], 'type'=>$connection->type]));
             }
         }
     } 
