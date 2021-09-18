@@ -100,8 +100,7 @@ class Connection {
 
         // 查询成员
         if (in_array($data['type'], [3,5])) {
-            $user = $db->select("AES_DECRYPT(card_id, '".Base::getEolKey()."') as card_id")->from('ims_user')->where('user_id= :user_id')->bindValues(array('user_id' => $token['user_id']))->row();
-            $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $user['card_id']))->query();
+            $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $token['card_id']))->query();
             $members = $db->select('id,member_id')->from('face_room_member')->where('room_id= :room_id AND type = :type AND member_id in ('.implode(',', array_column($students, 'student_id')).')')->bindValues(array('room_id' => $data['room_id'], 'type'=> 3))->row();
         } else {
             $members = $db->select('id,member_id')->from('face_room_member')->where('room_id= :room_id AND type in (1,2,4) AND member_id = :member_id')->bindValues(array('room_id' => $data['room_id'], 'member_id'=>$token['user_id']))->row();
@@ -176,7 +175,6 @@ class Connection {
      * @return void
      */
     public static function closeConnect($connection, &$ws_worker, $db) {
-        var_dump($connection);
         if (!empty($connection->id)) {
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';
