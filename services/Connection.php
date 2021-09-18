@@ -176,40 +176,38 @@ class Connection {
      * @return void
      */
     public static function closeConnect($connection, &$ws_worker, $db) {
-        if (!empty($connection->member_id)) {
+        if (!empty($connection->id)) {
             if ($connection->type == 5) {
                 $ws_worker->room[$connection->room_id]['double']['connection'] = '';
                 $ws_worker->room[$connection->room_id]['double']['status'] = 1;
             } else {
-                if (in_array($connection->type, [1,2])) {
-                    $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['connection'] = '';
-                    $ws_worker->room[$connection->room_id]['teacher'][$connection->member_id]['status'] = 1;
-                    Service::teacherList($connection, $ws_worker);
-                }
+                $ws_worker->room[$connection->room_id]['member'][$connection->id]['connection'] = '';
+                $ws_worker->room[$connection->room_id]['member'][$connection->id]['status'] = 1;
+                // if (in_array($connection->type, [1,2])) {
+                //     Service::teacherList($connection, $ws_worker);
+                // }
                 if ($connection->type == 3) {
-                    $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['connection'] = '';
-                    $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['status'] = 1;
                     Service::studentList($connection, $ws_worker);
                     
-                    if ($ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] == 3) {
-                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['end_time'] = time();
-                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['count_time'] += $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['end_time'] - $ws_worker->room[$connection->room_id][$connection->member_id]['start_time'];
-                        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['times'][] = $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['start_time'].'-'.$ws_worker->room[$connection->room_id][$connection->member_id]['end_time'];
+                    if ($ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] == 3) {
+                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'] = time();
+                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['count_time'] += $ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'] - $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'];
+                        $ws_worker->room[$connection->room_id]['member'][$connection->id]['times'][] = $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'].'-'.$ws_worker->room[$connection->room_id]['member'][$connection->id]['end_time'];
                     }
-
-                    // 记录操作
-                    $db->insert('face_log_room_active')->cols(array(
-                        'school_id'=>$connection->school_id,
-                        'year'=>$connection->school_year,
-                        'scene_id'=>$connection->scene_id,
-                        'room_id'=>$connection->room_id,
-                        'member_id'=>$connection->member_id,
-                        'type'=>$connection->type,
-                        'active'=>1,
-                        'active_time'=>date('Y-m-d H:i:s')
-                    ))->query();
                 }
             }
+
+            // 记录操作
+            $db->insert('face_log_room_active')->cols(array(
+                'school_id'=>$connection->school_id,
+                'year'=>$connection->school_year,
+                'scene_id'=>$connection->scene_id,
+                'room_id'=>$connection->room_id,
+                'member_id'=>$connection->member_id,
+                'type'=>$connection->type,
+                'active'=>1,
+                'active_time'=>date('Y-m-d H:i:s')
+            ))->query();
         }
     }
 }

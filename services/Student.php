@@ -25,16 +25,16 @@ class Student {
      * @return void
      */
     public static function invite($connection, &$ws_worker, $data) {
-        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] = 3;
-        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['start_time'] = time();
+        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 3;
+        $ws_worker->room[$connection->room_id]['member'][$connection->id]['start_time'] = time();
         Service::studentList($connection, $ws_worker);
         Service::wait($connection, $ws_worker);
 
         // 学生面试时间检测
-        $ws_worker->face_timer_id[$connection->room_id] = Timer::add(Config::$faceTime - 30, function()use($connection, $ws_worker){
-            $connection->send(Base::success('time_out', '即将超过一名考生的面试时间'));
-            Timer::del($ws_worker->face_timer_id[$connection->room_id]);
-        }, null, false);
+        // $ws_worker->face_timer_id[$connection->room_id] = Timer::add(Config::$faceTime - 30, function()use($connection, $ws_worker){
+        //     $connection->send(Base::success('time_out', '即将超过一名考生的面试时间'));
+        //     Timer::del($ws_worker->face_timer_id[$connection->room_id]);
+        // }, null, false);
     }
 
     /**
@@ -45,8 +45,8 @@ class Student {
      * @return void
      */
     public static function shelve($connection, &$ws_worker, $data) {
-        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] = 2;
-        foreach ($ws_worker->room[$connection->room_id]['teacher'] as $value) {
+        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 2;
+        foreach ($ws_worker->room[$connection->room_id]['member'] as $value) {
             if (in_array($value['type'], [1,2]) && $value['connection']) {
                 $value['connection']->send(Base::success('shelve'));
             }
@@ -63,8 +63,7 @@ class Student {
      */
     public static function hangUp($connection, &$ws_worker, $data) {
         // 通知考生结束面试
-        var_dump($ws_worker->room[$connection->room_id]['double']);
-        $ws_worker->room[$connection->room_id]['student'][$connection->member_id]['step'] = 4;
+        $ws_worker->room[$connection->room_id]['member'][$connection->id]['step'] = 4;
         if ($ws_worker->room[$connection->room_id]['double']['status'] == 2) {
             $ws_worker->room[$connection->room_id]['double']['connection']->send(Base::success('hang_up'));
         }
