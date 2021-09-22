@@ -105,7 +105,7 @@ class Connection {
         } else {
             $members = $db->select('id,member_id')->from('face_room_member')->where('room_id= :room_id AND type in (1,2,4) AND member_id = :member_id')->bindValues(array('room_id' => $data['room_id'], 'member_id'=>$token['user_id']))->row();
         }
-
+var_dump($members);die;
         // 初始化连接
         if ($data['type'] == 5) {
             if ($ws_worker->room[$data['room_id']]['double']['type'] != $data['type']) {
