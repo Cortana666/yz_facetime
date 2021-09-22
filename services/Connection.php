@@ -101,6 +101,7 @@ class Connection {
         // 查询成员
         if (in_array($data['type'], [3,5])) {
             $students = $db->select("student_id")->from('face_student')->where("AES_DECRYPT(card_id, '".Base::getEolKey()."')= :card_id")->bindValues(array('card_id' => $token['card_id']))->query();
+            var_dump($students);die;
             $members = $db->select('id,member_id')->from('face_room_member')->where('room_id= :room_id AND type = :type AND member_id in ('.implode(',', array_column($students, 'student_id')).')')->bindValues(array('room_id' => $data['room_id'], 'type'=> 3))->row();
         } else {
             $members = $db->select('id,member_id')->from('face_room_member')->where('room_id= :room_id AND type in (1,2,4) AND member_id = :member_id')->bindValues(array('room_id' => $data['room_id'], 'member_id'=>$token['user_id']))->row();
